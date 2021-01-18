@@ -1,0 +1,31 @@
+{
+  "name": "appvendas",
+  "version": "1.0.0",
+  "description": "App de vendas",
+  "main": "app.ts",
+  "scripts": {
+    "test": "text",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint --fix --ext .js,.json ."
+  },
+  "author": "Diego",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "sequelize-cli": "^6.2.0",
+    "sucrase": "^3.17.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5"
+  }
+}
