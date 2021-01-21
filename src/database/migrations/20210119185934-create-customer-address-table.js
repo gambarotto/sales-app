@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idcustomer: {
+      id_customer: {
         type: Sequelize.STRING,
         references: { model: 'customers', key: 'id' },
         onUpdate: 'CASCADE',
@@ -41,15 +41,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      typeAddress: {
+      type_address: {
         type: Sequelize.ENUM('Casa', 'Trabalho', 'Outro'),
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },

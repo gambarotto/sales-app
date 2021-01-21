@@ -23,7 +23,7 @@ class ImageProduct extends Model {
 
   static associate(models) {
     this.belongsTo(models.Product, {
-      foreignKey: 'idProduct',
+      foreignKey: 'id_product',
       as: 'product',
     });
   }

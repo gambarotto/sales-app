@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('imageProducts', {
+    await queryInterface.createTable('image_products', {
       id: {
         type: Sequelize.STRING,
         allowNull: false,
         primaryKey: true,
       },
-      idProduct: {
+      id_product: {
         type: Sequelize.STRING,
         references: { model: 'products', key: 'id' },
         onUpdate: 'CASCADE',
@@ -28,11 +28,11 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -40,6 +40,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('imageProducts');
+    return queryInterface.dropTable('image_products');
   },
 };

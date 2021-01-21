@@ -5,7 +5,7 @@ class Tracking extends Model {
     super.init(
       {
         description: Sequelize.STRING,
-        dateStatus: Sequelize.DATE,
+        date_status: Sequelize.DATE,
       },
       {
         sequelize,
@@ -17,11 +17,11 @@ class Tracking extends Model {
 
   static associate(models) {
     this.belongsTo(models.Order, {
-      foreignKey: 'idOrder',
+      foreignKey: 'id_order',
       as: 'order',
     });
     // this.belongsTo(models.Status, {
-    //   foreignKey: 'idStatus',
+    //   foreignKey: 'id_status',
     //   as: 'status',
     // });
   }

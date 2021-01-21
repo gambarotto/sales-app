@@ -6,16 +6,16 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idcustomer: {
+      id_customer: {
         type: Sequelize.STRING,
         references: { model: 'customers', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      idTypePayment: {
+      id_type_payment: {
         type: Sequelize.STRING,
-        references: { model: 'typePayments', key: 'id' },
+        references: { model: 'type_payments', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
@@ -24,36 +24,36 @@ module.exports = {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },
-      idBillingAddress: {
+      id_billing_address: {
         type: Sequelize.STRING,
         references: { model: 'adresses', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      idDeliveryAddress: {
+      id_delivery_address: {
         type: Sequelize.STRING,
         references: { model: 'adresses', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      idStatus: {
+      id_status: {
         type: Sequelize.STRING,
         references: { model: 'status', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      dateStatus: {
+      date_status: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },

@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('orderProducts', {
-      idOrder: {
+    return queryInterface.createTable('order_products', {
+      id_order: {
         type: Sequelize.STRING,
         references: { model: 'orders', key: 'id' },
         onUpdate: 'CASCADE',
@@ -9,7 +9,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idProduct: {
+      id_product: {
         type: Sequelize.STRING,
         references: { model: 'products', key: 'id' },
         onUpdate: 'CASCADE',
@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idDelivery: {
+      id_delivery: {
         type: Sequelize.STRING,
         references: { model: 'deliveries', key: 'id' },
         onUpdate: 'CASCADE',
@@ -28,15 +28,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      amountProducts: {
+      amount_products: {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('orderProducts');
+    return queryInterface.dropTable('order_products');
   },
 };

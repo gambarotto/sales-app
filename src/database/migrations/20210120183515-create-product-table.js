@@ -12,14 +12,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      idBrand: {
+      id_brand: {
         type: Sequelize.STRING,
         references: { model: 'brands', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      idCategory: {
+      id_category: {
         type: Sequelize.STRING,
         references: { model: 'categories', key: 'id' },
         onUpdate: 'CASCADE',
@@ -30,19 +30,19 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      costPrice: {
+      cost_price: {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },
-      salePrice: {
+      sale_price: {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },

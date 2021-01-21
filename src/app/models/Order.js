@@ -5,7 +5,7 @@ class Order extends Model {
     super.init(
       {
         amount: Sequelize.DOUBLE,
-        dateStatus: Sequelize.DATE,
+        date_status: Sequelize.DATE,
       },
       {
         sequelize,
@@ -16,23 +16,23 @@ class Order extends Model {
 
   static associate(models) {
     this.belongsTo(models.Customer, {
-      foreignKey: 'idCustomer',
+      foreignKey: 'id_customer',
       as: 'customer',
     });
     this.belongsTo(models.TypePayment, {
-      foreignKey: 'idTypePayment',
+      foreignKey: 'id_type_payment',
       as: 'typePayment',
     });
     this.belongsTo(models.Address, {
-      foreignKey: 'idBillingAddress',
+      foreignKey: 'id_billing_address',
       as: 'billingAddress',
     });
     this.belongsTo(models.Address, {
-      foreignKey: 'idDeliveryAddress',
+      foreignKey: 'id_delivery_address',
       as: 'deliveryAddress',
     });
     this.belongsTo(models.Status, {
-      foreignKey: 'idStatus',
+      foreignKey: 'id_status',
       as: 'status',
     });
   }

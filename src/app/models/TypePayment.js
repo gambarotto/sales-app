@@ -9,7 +9,7 @@ class TypePayment extends Model {
       },
       {
         sequelize,
-        //modelName: 'typePayments',
+        //modelName: 'type_payments',
       }
     );
     return this;

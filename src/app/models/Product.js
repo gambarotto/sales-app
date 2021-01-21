@@ -5,8 +5,8 @@ class Product extends Model {
     super.init(
       {
         name: Sequelize.STRING,
-        costPrice: Sequelize.DOUBLE,
-        salePrice: Sequelize.DOUBLE,
+        cost_price: Sequelize.DOUBLE,
+        sale_price: Sequelize.DOUBLE,
       },
       {
         sequelize,
@@ -17,11 +17,11 @@ class Product extends Model {
 
   static associate(models) {
     this.belongsTo(models.Brand, {
-      foreignKey: 'idBrand',
+      foreignKey: 'id_brand',
       as: 'brand',
     });
     this.belongsTo(models.Category, {
-      foreignKey: 'idCategory',
+      foreignKey: 'id_category',
       as: 'category',
     });
   }

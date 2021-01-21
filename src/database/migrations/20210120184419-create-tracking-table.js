@@ -8,14 +8,14 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idOrder: {
+      id_order: {
         type: Sequelize.STRING,
         references: { model: 'orders', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
-      idStatus: {
+      id_status: {
         type: Sequelize.STRING,
         references: { model: 'status', key: 'id' },
         onUpdate: 'CASCADE',
@@ -26,15 +26,15 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
-      dateStatus: {
+      date_status: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },

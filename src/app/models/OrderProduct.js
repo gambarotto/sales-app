@@ -5,7 +5,7 @@ class OrderProduct extends Model {
     super.init(
       {
         qty: Sequelize.INTEGER,
-        amountProducts: Sequelize.DOUBLE,
+        amount_products: Sequelize.DOUBLE,
       },
       {
         sequelize,
@@ -16,15 +16,15 @@ class OrderProduct extends Model {
 
   static associate(models) {
     this.belongsTo(models.Order, {
-      foreignKey: 'idOrder',
+      foreignKey: 'id_order',
       as: 'order',
     });
     this.belongsTo(models.Product, {
-      foreignKey: 'idProduct',
+      foreignKey: 'id_product',
       as: 'product',
     });
     this.belongsTo(models.Delivery, {
-      foreignKey: 'idDelivery',
+      foreignKey: 'id_delivery',
       as: 'delivery',
     });
   }

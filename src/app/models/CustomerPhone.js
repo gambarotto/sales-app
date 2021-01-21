@@ -18,7 +18,7 @@ class CustomerPhone extends Model {
 
   static associate(models) {
     this.belongsTo(models.Customer, {
-      foreignKey: 'idCustomer',
+      foreignKey: 'id_customer',
       as: 'customer',
     });
   }

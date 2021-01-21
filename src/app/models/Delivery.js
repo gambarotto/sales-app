@@ -4,8 +4,8 @@ class Delivery extends Model {
   static init(sequelize) {
     super.init(
       {
-        scheduleTo: Sequelize.DATE,
-        dateStatus: Sequelize.DATE,
+        schedule_to: Sequelize.DATE,
+        date_status: Sequelize.DATE,
       },
       {
         sequelize,
@@ -16,11 +16,11 @@ class Delivery extends Model {
 
   static associate(models) {
     this.belongsTo(models.Order, {
-      foreignKey: 'idOrder',
+      foreignKey: 'id_order',
       as: 'order',
     });
     this.belongsTo(models.Status, {
-      foreignKey: 'idStatus',
+      foreignKey: 'id_status',
       as: 'status',
     });
   }

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      dateOfBirth: {
+      date_of_birth: {
         type: Sequelize.DATE,
         allowNull: true,
       },
@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      passwordHash: {
+      password_hash: {
         type: Sequelize.STRING,
         allowNull: false,
       },

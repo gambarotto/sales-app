@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('favorities', {
-      idcustomer: {
+      id_customer: {
         type: Sequelize.STRING,
         references: { model: 'customers', key: 'id' },
         onUpdate: 'CASCADE',
@@ -11,7 +11,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idProduct: {
+      id_product: {
         type: Sequelize.STRING,
         references: { model: 'products', key: 'id' },
         onUpdate: 'CASCADE',
@@ -19,11 +19,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },

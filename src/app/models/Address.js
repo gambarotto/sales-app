@@ -11,7 +11,7 @@ class Address extends Model {
         uf: Sequelize.STRING(2),
         city: Sequelize.STRING,
         zipcode: Sequelize.STRING,
-        typeAddress: Sequelize.ENUM('Casa', 'Trabalho', 'Outro'),
+        type_address: Sequelize.ENUM('Casa', 'Trabalho', 'Outro'),
       },
       {
         sequelize,
@@ -23,7 +23,7 @@ class Address extends Model {
 
   static associate(models) {
     this.belongsTo(models.Customer, {
-      foreignKey: 'idCustomer',
+      foreignKey: 'id_customer',
       as: 'customer',
     });
   }
