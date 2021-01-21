@@ -4,49 +4,52 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('products', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-      },
-      id_brand: {
-        type: Sequelize.INTEGER,
-        references: { model: 'brand', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-        allowNull: false,
-      },
-      id_category: {
-        type: Sequelize.INTEGER,
-        references: { model: 'category', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      sale_value: {
-        type: Sequelize.DECIMAL(7, 2),
+      idBrand: {
+        type: Sequelize.STRING,
+        references: { model: 'brands', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
         allowNull: false,
       },
-      cost_value: {
-        type: Sequelize.DECIMAL(7, 2),
+      idCategory: {
+        type: Sequelize.STRING,
+        references: { model: 'categories', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
         allowNull: false,
       },
-      created_at: {
+      weight: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      costPrice: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+      },
+      salePrice: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+      },
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
     });
   },
 
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('products');
+  down: (queryInterface) => {
+    return queryInterface.dropTable('products');
   },
 };

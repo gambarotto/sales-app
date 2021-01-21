@@ -1,9 +1,40 @@
 //Faz a conexão com o db
 import Sequelize from 'sequelize';
+import Customer from '../app/models/Customer';
+import Address from '../app/models/Address';
+import Order from '../app/models/Order';
+import OrderProduct from '../app/models/OrderProduct';
+import Tracking from '../app/models/Tracking';
+import Delivery from '../app/models/Delivery';
+import Product from '../app/models/Product';
+import Category from '../app/models/Category';
+import ImageProduct from '../app/models/ImageProduct';
+import TypePayment from '../app/models/TypePayment';
+import Favorite from '../app/models/Favorite';
+import Status from '../app/models/Status';
+import Brand from '../app/models/Brand';
+import CustomerPhone from '../app/models/CustomerPhone';
+import User from '../app/models/User';
 
 import databaseConfig from '../config/database';
 
-const models = [];
+const models = [
+  Customer,
+  CustomerPhone,
+  Address,
+  Category,
+  TypePayment,
+  Status,
+  Brand,
+  Order,
+  OrderProduct,
+  Tracking,
+  Delivery,
+  Product,
+  Favorite,
+  ImageProduct,
+  User,
+];
 
 class Database {
   constructor() {

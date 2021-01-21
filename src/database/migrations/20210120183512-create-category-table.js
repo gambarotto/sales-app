@@ -4,27 +4,33 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('categories', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      created_at: {
+      idParentCategory: {
+        type: Sequelize.STRING,
+        references: { model: 'categories', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        allowNull: false,
+      },
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
     });
   },
 
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('categories');
+  down: (queryInterface) => {
+    return queryInterface.dropTable('categories');
   },
 };

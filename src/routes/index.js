@@ -1,8 +1,5 @@
-import { Router } from 'express';
+import user from './user.routes';
+import customer from './customer.routes';
 
-const routes = new Router();
-
-routes.get('/', (req, res) => {
-  res.json({ message: 'Olá' });
-});
+const routes = [user, customer];
 export default routes;

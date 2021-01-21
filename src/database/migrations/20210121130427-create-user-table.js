@@ -2,11 +2,10 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('shop', {
+    await queryInterface.createTable('users', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       name: {
@@ -18,15 +17,19 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      password_hash: {
+      responsability: {
+        type: Sequelize.ENUM('administrator', 'manager', 'employee'),
+        allowNull: false,
+      },
+      passwordHash: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -34,6 +37,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('shop');
+    return queryInterface.dropTable('users');
   },
 };
