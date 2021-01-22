@@ -17,4 +17,25 @@ export class validationUser {
     });
     return response;
   }
+  static async email(email) {
+    const schema = yup
+      .object()
+      .shape({ email: yup.string().email().required() });
+    const response = await schema.isValid({ email });
+    return response;
+  }
+  static async password(password) {
+    const schema = yup
+      .object()
+      .shape({ email: yup.string().min(6).required() });
+    const response = await schema.isValid({ password });
+    return response;
+  }
+  static async responsability(responsability) {
+    const schema = yup.string().matches(/(administrator|manager|employee)/, {
+      excludeEmptyString: true,
+    });
+    const response = await schema.isValid({ responsability });
+    return response;
+  }
 }

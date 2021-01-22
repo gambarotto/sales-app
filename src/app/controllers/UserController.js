@@ -63,6 +63,10 @@ class UserController {
     ) {
       return res.json({ error: 'Password does not match' });
     }
+    const isValidPasswordYup = await validationUser.password(req.body.password);
+    if (!isValidPasswordYup) {
+      return res.json({ error: 'Password must to be at least 6 caracters' });
+    }
     await userReq.update(req.body);
 
     return res.json(userReq);
