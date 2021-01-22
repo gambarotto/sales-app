@@ -3,6 +3,7 @@ import SessionController from '../app/controllers/SessionController';
 import UserController from '../app/controllers/UserController';
 import { AuthUser } from '../app/middlewares/AuthUser';
 import BrandController from '../app/controllers/BrandController';
+import CategoryController from '../app/controllers/CategoryController';
 
 const routes = new Router();
 
@@ -22,4 +23,10 @@ routes.put('/brands/:brandId', AuthUser, BrandController.update);
 routes.get('/brands/:brandId', AuthUser, BrandController.show);
 routes.delete('/brands/:brandId', AuthUser, BrandController.delete);
 
+/** CATEGORIES ROUTES */
+routes.post('/categories', AuthUser, CategoryController.store);
+routes.get('/categories', AuthUser, CategoryController.index);
+routes.put('/categories/:categoryId', AuthUser, CategoryController.update);
+routes.get('/categories/:categoryId', AuthUser, CategoryController.show);
+routes.delete('/categories/:categoryId', AuthUser, CategoryController.delete);
 export default routes;

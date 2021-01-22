@@ -54,3 +54,16 @@ export class ValidationBrands {
     return response;
   }
 }
+
+export class ValidationCategories {
+  static async store(data) {
+    const schema = yup.object().shape({
+      name: yup.string().required(),
+    });
+    console.log(data);
+    const response = await schema.isValid({
+      name: data.name,
+    });
+    return response;
+  }
+}

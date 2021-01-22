@@ -15,7 +15,7 @@ class Category extends Model {
 
   static associate(models) {
     this.belongsTo(models.Category, {
-      foreignKey: 'id_category',
+      foreignKey: 'id_parent_category',
       as: 'ParentCategory',
     });
   }
