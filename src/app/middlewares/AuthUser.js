@@ -2,8 +2,10 @@ import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 
 import authConfig from '../../config/auth';
+import User from '../models/User';
+//import User from '../models/User';
 
-async function user(req, res, next) {
+export async function AuthUser(req, res, next) {
   const authHeaders = req.headers.authorization;
   if (!authHeaders) {
     return res.status(400).json({ error: 'Token not provider' });
@@ -20,4 +22,13 @@ async function user(req, res, next) {
   }
 }
 
-export default user;
+export async function checkResponsabilityUserToken(id) {
+  const { responsability } = await User.findByPk(id);
+  if (!responsability) {
+    return false;
+  }
+  if (responsability !== 'administrator' && responsability !== 'manager') {
+    return false;
+  }
+  return true;
+}

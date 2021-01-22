@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export class validationUser {
+export class ValidationUser {
   static async store(name, email, password, responsability) {
     const schema = yup.object().shape({
       name: yup.string().required(),
@@ -36,6 +36,21 @@ export class validationUser {
       excludeEmptyString: true,
     });
     const response = await schema.isValid({ responsability });
+    return response;
+  }
+}
+
+export class ValidationBrands {
+  static async store(name, description) {
+    const schema = yup.object().shape({
+      name: yup.string().required(),
+      description: yup.string().required(),
+    });
+
+    const response = await schema.isValid({
+      name,
+      description,
+    });
     return response;
   }
 }

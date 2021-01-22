@@ -1,11 +1,11 @@
-import { validationUser } from '../../helpers/ValidationRequest';
+import { ValidationUser } from '../../helpers/ValidationRequests';
 import User from '../models/User';
 import { v4 as uuidv4 } from 'uuid';
 
 class UserController {
   async store(req, res) {
     const { name, email, password, responsability } = req.body;
-    const isValid = await validationUser.store(
+    const isValid = await ValidationUser.store(
       name,
       email,
       password,
@@ -63,7 +63,7 @@ class UserController {
     ) {
       return res.json({ error: 'Password does not match' });
     }
-    const isValidPasswordYup = await validationUser.password(req.body.password);
+    const isValidPasswordYup = await ValidationUser.password(req.body.password);
     if (!isValidPasswordYup) {
       return res.json({ error: 'Password must to be at least 6 caracters' });
     }
@@ -99,5 +99,6 @@ class UserController {
     });
   }
 }
+
 export default new UserController();
 // store, index, update, delete, show
