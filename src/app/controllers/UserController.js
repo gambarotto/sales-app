@@ -80,6 +80,20 @@ class UserController {
 
     return res.json({ message: 'User was deleted' });
   }
+
+  async show(req, res) {
+    const userReq = await User.findByPk(req.params.userId);
+    if (!userReq) {
+      return res.json({ error: 'User not found' });
+    }
+    const { id, name, email, responsability } = userReq;
+    return res.json({
+      id,
+      name,
+      email,
+      responsability,
+    });
+  }
 }
 export default new UserController();
 // store, index, update, delete, show

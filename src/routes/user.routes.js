@@ -11,5 +11,6 @@ routes.post('/sessions/users', SessionController.adminStore);
 routes.post('/users', UserController.store);
 routes.get('/users', AuthUser, UserController.index);
 routes.put('/users/:userId', AuthUser, UserController.update);
+routes.get('/users/:userId', AuthUser, UserController.show);
 
 export default routes;
