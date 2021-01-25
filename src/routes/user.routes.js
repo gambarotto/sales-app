@@ -4,6 +4,7 @@ import UserController from '../app/controllers/UserController';
 import { AuthUser } from '../app/middlewares/AuthUser';
 import BrandController from '../app/controllers/BrandController';
 import CategoryController from '../app/controllers/CategoryController';
+import ProductController from '../app/controllers/ProductController';
 
 const routes = new Router();
 
@@ -29,4 +30,12 @@ routes.get('/categories', AuthUser, CategoryController.index);
 routes.put('/categories/:categoryId', AuthUser, CategoryController.update);
 routes.get('/categories/:categoryId', AuthUser, CategoryController.show);
 routes.delete('/categories/:categoryId', AuthUser, CategoryController.delete);
+
+/** CATEGORIES ROUTES */
+routes.post('/products', AuthUser, ProductController.store);
+routes.get('/products', ProductController.index);
+routes.put('/products/:productId', AuthUser, ProductController.update);
+routes.get('/products/:productId', AuthUser, ProductController.show);
+routes.delete('/products/:productId', AuthUser, ProductController.delete);
+
 export default routes;
