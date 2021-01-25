@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import Category from '../models/Category';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
-import { ValidationCategories } from '../../helpers/ValidationRequests';
+import CategoriesValidation from '../../helpers/validations/CategoriesValidation';
 
 class CategoryController {
   async store(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    if (!(await ValidationCategories.store(req.body))) {
+    if (!(await CategoriesValidation.store(req.body))) {
       return res.json({ error: 'Please fill all fields' });
     }
     const alreadyExists = await Category.findOne({

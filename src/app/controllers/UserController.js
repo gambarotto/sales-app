@@ -1,30 +1,23 @@
-import { ValidationUser } from '../../helpers/ValidationRequests';
+import UsersValidation from '../../helpers/validations/UsersValidation';
 import User from '../models/User';
 import { v4 as uuidv4 } from 'uuid';
 
 class UserController {
   async store(req, res) {
-    const { name, email, password, responsability } = req.body;
-    const isValid = await ValidationUser.store(
-      name,
-      email,
-      password,
-      responsability
-    );
-    if (!isValid) {
-      return res.json({ error: 'Please fill all fields' });
+    const responseValidation = await UsersValidation.store(req.body);
+    if (responseValidation.errors) {
+      return res.json({ error: responseValidation.errors });
     }
-    const alreadyExists = await User.findOne({ where: { email } });
+    const alreadyExists = await User.findOne({
+      where: { email: responseValidation.email },
+    });
     if (alreadyExists) {
       return res.json({ error: 'Email Already Exists' });
     }
 
     const user = await User.create({
       id: uuidv4(),
-      name,
-      email,
-      password,
-      responsability,
+      ...responseValidation,
     });
 
     return res.json(user);
@@ -63,7 +56,9 @@ class UserController {
     ) {
       return res.json({ error: 'Password does not match' });
     }
-    const isValidPasswordYup = await ValidationUser.password(req.body.password);
+    const isValidPasswordYup = await UsersValidation.password(
+      req.body.password
+    );
     if (!isValidPasswordYup) {
       return res.json({ error: 'Password must to be at least 6 caracters' });
     }

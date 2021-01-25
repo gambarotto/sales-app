@@ -5,6 +5,7 @@ import { AuthUser } from '../app/middlewares/AuthUser';
 import BrandController from '../app/controllers/BrandController';
 import CategoryController from '../app/controllers/CategoryController';
 import ProductController from '../app/controllers/ProductController';
+import StatusController from '../app/controllers/StatusController';
 
 const routes = new Router();
 
@@ -38,4 +39,17 @@ routes.put('/products/:productId', AuthUser, ProductController.update);
 routes.get('/products/:productId', AuthUser, ProductController.show);
 routes.delete('/products/:productId', AuthUser, ProductController.delete);
 
+/** STATUS ROUTES */
+routes.post('/status', AuthUser, StatusController.store);
+routes.get('/status', AuthUser, StatusController.index);
+// routes.put('/status/:statusId', AuthUser, statusController.update);
+// routes.get('/status/:statusId', AuthUser, statusController.show);
+// routes.delete('/status/:statusId', AuthUser, statusController.delete);
+
+/** CUSTUMER ROUTES */
+// routes.post('/customer', AuthUser, CustomerController.store);
+// routes.get('/customer', CustomerController.index);
+// routes.put('/customer/:customerId', AuthUser, CustomerController.update);
+// routes.get('/customer/:customerId', AuthUser, CustomerController.show);
+// routes.delete('/customer/:customerId', AuthUser, CustomerController.delete);
 export default routes;

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import Brand from '../models/Brand';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
-import { ValidationBrands } from '../../helpers/ValidationRequests';
+import BrandsValidation from '../../helpers/validations/BrandsValidation';
 
 class BrandController {
   async store(req, res) {
@@ -9,7 +9,7 @@ class BrandController {
       return res.json({ error: 'You do not have privileges for do this' });
     }
     const { name, description } = req.body;
-    if (!(await ValidationBrands.store(name, description))) {
+    if (!(await BrandsValidation.store(name, description))) {
       return res.json({ error: 'Please fill all fields' });
     }
     const brand = await Brand.create({ id: uuidv4(), name, description });

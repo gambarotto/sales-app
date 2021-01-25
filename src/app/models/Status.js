@@ -9,7 +9,7 @@ class Status extends Model {
       },
       {
         sequelize,
-        //modelName: 'status',
+        //freezeTableName: true,
       }
     );
     return this;

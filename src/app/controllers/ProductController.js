@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import Product from '../models/Product';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
-import { ValidationProducts } from '../../helpers/ValidationRequests';
+import ProductsValidation from '../../helpers/validations/ProductsValidation';
 import Category from '../models/Category';
 import Brand from '../models/Brand';
 
@@ -10,7 +10,7 @@ class ProductController {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const responseValidation = await ValidationProducts.store(req.body);
+    const responseValidation = await ProductsValidation.store(req.body);
     if (responseValidation.errors) {
       return res.json({ error: responseValidation.errors });
     }
