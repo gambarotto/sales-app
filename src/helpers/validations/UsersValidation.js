@@ -29,10 +29,8 @@ class UsersValidation {
     return response;
   }
   static async password(password) {
-    const schema = yup
-      .object()
-      .shape({ email: yup.string().min(6).required() });
-    const response = await schema.isValid({ password });
+    const schema = yup.string().min(6).required();
+    const response = await schema.isValid(password);
     return response;
   }
   static async responsability(responsability) {

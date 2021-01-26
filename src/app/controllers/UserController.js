@@ -1,6 +1,6 @@
 import UsersValidation from '../../helpers/validations/UsersValidation';
 import User from '../models/User';
-import { v4 as uuidv4 } from 'uuid';
+import UserRepositories from '../repositories/UserRepositories';
 
 class UserController {
   async store(req, res) {
@@ -14,12 +14,7 @@ class UserController {
     if (alreadyExists) {
       return res.json({ error: 'Email Already Exists' });
     }
-
-    const user = await User.create({
-      id: uuidv4(),
-      ...responseValidation,
-    });
-
+    const user = await UserRepositories.createUser(responseValidation);
     return res.json(user);
   }
 
@@ -27,9 +22,7 @@ class UserController {
     if (!req.userId) {
       return res.json({ error: 'You can not do this' });
     }
-    const users = await User.findAll({
-      attributes: ['id', 'name', 'email', 'responsability'],
-    });
+    const users = await UserRepositories.findAllUsers();
 
     return res.json(users);
   }
@@ -38,23 +31,25 @@ class UserController {
     if (!req.userId) {
       return res.json({ error: 'You can not do this' });
     }
-    const userReq = await User.findByPk(req.params.userId);
+    const userReq = await UserRepositories.findUserById(req.params.userId);
     if (req.userId !== userReq.id) {
       return res.json({ error: 'You can not do this' });
     }
-    if (req.body.email && req.body.email !== userReq.email) {
-      const alreadyExists = await User.findOne({
-        where: { email: req.body.email },
-      });
+    const emailReq = req.body.email;
+    if (emailReq && emailReq !== userReq.email) {
+      const alreadyExists = await UserRepositories.findUserByEmail(emailReq);
       if (alreadyExists) {
         return res.json({ error: 'Email Already Exists' });
       }
     }
-    if (
-      req.body.oldPassword &&
-      !(await userReq.checkPassword(req.body.oldPassword))
-    ) {
-      return res.json({ error: 'Password does not match' });
+    if (req.body.oldPassword) {
+      const isCorrect = await UserRepositories.checkPasswordUser(
+        userReq,
+        req.body.oldPassword
+      );
+      if (!isCorrect) {
+        return res.json({ error: 'Password does not match' });
+      }
     }
     const isValidPasswordYup = await UsersValidation.password(
       req.body.password
@@ -62,26 +57,26 @@ class UserController {
     if (!isValidPasswordYup) {
       return res.json({ error: 'Password must to be at least 6 caracters' });
     }
-    await userReq.update(req.body);
+    const userUpdated = await UserRepositories.updateUser(userReq, req.body);
 
-    return res.json(userReq);
+    return res.json({
+      id: userUpdated.id,
+      name: userUpdated.name,
+      email: userUpdated.email,
+      responsability: userUpdated.responsability,
+    });
   }
 
   async delete(req, res) {
     if (!req.userId) {
       return res.json({ error: 'You can not do this' });
     }
-    const userReq = await User.findByPk(req.params.userId);
-    if (req.userId !== userReq.id) {
-      return res.json({ error: 'You can not do this' });
-    }
-    await userReq.destroy();
-
+    await UserRepositories.deleteUser(req.params.userId);
     return res.json({ message: 'User was deleted' });
   }
 
   async show(req, res) {
-    const userReq = await User.findByPk(req.params.userId);
+    const userReq = await UserRepositories.findUserById(req.params.userId);
     if (!userReq) {
       return res.json({ error: 'User not found' });
     }
