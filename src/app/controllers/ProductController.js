@@ -1,9 +1,8 @@
-import { v4 as uuidv4 } from 'uuid';
-import Product from '../models/Product';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 import ProductsValidation from '../../helpers/validations/ProductsValidation';
-import Category from '../models/Category';
-import Brand from '../models/Brand';
+import ProductRepositories from '../repositories/ProductRepositories';
+import BrandRepositories from '../repositories/BrandRepositories';
+import CategoryRepositories from '../repositories/CategoryRepositories';
 
 class ProductController {
   async store(req, res) {
@@ -15,98 +14,41 @@ class ProductController {
       return res.json({ error: responseValidation.errors });
     }
 
-    const {
-      id,
-      name,
-      description,
-      cost_price,
-      sale_price,
-      weight,
-      id_brand,
-      id_category,
-    } = await Product.create({
-      id: uuidv4(),
-      ...responseValidation,
-    });
-
-    return res.json({
-      id,
-      name,
-      description,
-      cost_price,
-      sale_price,
-      weight,
-      id_brand,
-      id_category,
-    });
+    const product = await ProductRepositories.createProduct(responseValidation);
+    return res.json(product);
   }
   async index(req, res) {
-    const products = await Product.findAll({
-      attributes: [
-        'id',
-        'name',
-        'description',
-        'cost_price',
-        'sale_price',
-        'weight',
-      ],
-      include: [
-        {
-          model: Category,
-          as: 'category',
-          attributes: ['id', 'name'],
-        },
-        {
-          model: Brand,
-          as: 'brand',
-          attributes: ['id', 'name', 'description'],
-        },
-      ],
-    });
+    const products = await ProductRepositories.findAllProducts();
     return res.json(products);
   }
   async update(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const product = await Product.findByPk(req.params.productId);
+    const product = await ProductRepositories.findProductById(
+      req.params.productId
+    );
     if (!product) {
       return res.json({ error: 'Product not found' });
     }
     if (req.body.idBrand) {
-      const brandReq = await Brand.findByPk(req.body.idBrand);
+      const brandReq = await BrandRepositories.findBrandById(req.body.idBrand);
       if (!brandReq) {
         return res.json({ error: 'Brand not found' });
       }
     }
     if (req.body.idCategory) {
-      const categoryReq = await Category.findByPk(req.body.idCategory);
+      const categoryReq = await CategoryRepositories.findCategoryById(
+        req.body.idCategory
+      );
       if (!categoryReq) {
         return res.json({ error: 'Category not found' });
       }
     }
-    const productUpdated = await product.update(req.body, {
-      attributes: [
-        'id',
-        'name',
-        'description',
-        'cost_price',
-        'sale_price',
-        'weight',
-      ],
-      include: [
-        {
-          model: Category,
-          as: 'category',
-          attributes: ['id', 'name'],
-        },
-        {
-          model: Brand,
-          as: 'brand',
-          attributes: ['id', 'name', 'description'],
-        },
-      ],
-    });
+    const productUpdated = await ProductRepositories.updateProduct(
+      product,
+      req.body
+    );
 
     return res.json(productUpdated);
   }
@@ -114,19 +56,23 @@ class ProductController {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const product = await Product.findByPk(req.params.productId);
+    const product = await ProductRepositories.findProductById(
+      req.params.productId
+    );
     if (!product) {
       return res.json({ error: 'Product not found' });
     }
     try {
-      await product.destroy();
+      await ProductRepositories.deleteProduct(product);
       return res.json({ message: 'Product was deleted' });
     } catch (error) {
       return res.json({ error });
     }
   }
   async show(req, res) {
-    const product = await Product.findByPk(req.params.productId);
+    const product = await ProductRepositories.findProductById(
+      req.params.productId
+    );
     if (!product) {
       return res.json({ error: 'Product not found' });
     }
