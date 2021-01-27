@@ -42,9 +42,9 @@ routes.delete('/products/:productId', AuthUser, ProductController.delete);
 /** STATUS ROUTES */
 routes.post('/status', AuthUser, StatusController.store);
 routes.get('/status', AuthUser, StatusController.index);
-// routes.put('/status/:statusId', AuthUser, statusController.update);
-// routes.get('/status/:statusId', AuthUser, statusController.show);
-// routes.delete('/status/:statusId', AuthUser, statusController.delete);
+routes.put('/status/:statusId', AuthUser, StatusController.update);
+routes.get('/status/:statusId', AuthUser, StatusController.show);
+routes.delete('/status/:statusId', AuthUser, StatusController.delete);
 
 /** CUSTUMER ROUTES */
 // routes.post('/customer', AuthUser, CustomerController.store);

@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
-import Category from '../models/Category';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 import CategoriesValidation from '../../helpers/validations/CategoriesValidation';
+import CategoryRepositories from '../repositories/CategoryRepositories';
 
 class CategoryController {
   async store(req, res) {
@@ -11,49 +10,52 @@ class CategoryController {
     if (!(await CategoriesValidation.store(req.body))) {
       return res.json({ error: 'Please fill all fields' });
     }
-    const alreadyExists = await Category.findOne({
+    const alreadyExists = await CategoryRepositories.findCategoryByName({
       where: { name: req.body.name },
     });
     if (alreadyExists) {
       return res.json({ error: 'Category already exists' });
     }
-    const category = await Category.create({
-      id: uuidv4(),
-      name: req.body.name,
-    });
-    return res.json({
-      id: category.id,
-      name: category.name,
-    });
+    const category = await CategoryRepositories.createCategory(req.body);
+    return res.json(category);
   }
   async index(req, res) {
-    const categories = await Category.findAll({
-      attributes: ['id', 'name'],
-    });
-    return res.json(categories);
+    const response = await CategoryRepositories.findAllCategories();
+    return res.json(response);
   }
   async update(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const category = await Category.findByPk(req.params.categoryId);
+    console.log('aq0');
+    const category = await CategoryRepositories.findCategoryById(
+      req.params.categoryId
+    );
+    console.log('aq');
     if (!category) {
       return res.json({ error: 'Category not found' });
     }
-    const { id, name } = await category.update(req.body);
-    return res.json({ id, name });
+    const response = await CategoryRepositories.updateCategory(
+      category,
+      req.body
+    );
+    return res.json(response);
   }
   async delete(req, res) {
-    const category = await Category.findByPk(req.params.categoryId);
+    const category = await CategoryRepositories.findCategoryById(
+      req.params.categoryId
+    );
     if (!category) {
       return res.json({ error: 'Category not found' });
     }
-    await category.destroy();
+    const response = await CategoryRepositories.deleteCategory(category);
 
-    return res.json({ message: 'The Category was deleted' });
+    return res.json(response);
   }
   async show(req, res) {
-    const category = await Category.findByPk(req.params.categoryId);
+    const category = await CategoryRepositories.findCategoryById(
+      req.params.categoryId
+    );
     if (!category) {
       return res.json({ error: 'Category not found' });
     }

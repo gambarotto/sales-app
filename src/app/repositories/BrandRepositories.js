@@ -20,7 +20,7 @@ class BrandRepositories {
     return brands;
   }
   static async updateBrand(brand, data) {
-    const { id, name, description } = await brand.update(...data);
+    const { id, name, description } = await brand.update(data);
     return { id, name, description };
   }
   static async deleteBrand(id) {
