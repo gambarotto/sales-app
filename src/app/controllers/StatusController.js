@@ -1,3 +1,4 @@
+import StatusValidation from '../../helpers/validations/StatusValidation';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 import StatusRepositories from '../repositories/StatusRepositories';
 
@@ -6,7 +7,11 @@ class StatusController {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const response = await StatusRepositories.createStatus(req.body);
+    const responseValidation = await StatusValidation.store(req.body);
+    if (responseValidation.errors) {
+      return res.json(responseValidation);
+    }
+    const response = await StatusRepositories.createStatus(responseValidation);
     return res.json(response);
   }
   async index(req, res) {
@@ -24,7 +29,14 @@ class StatusController {
     if (status.error) {
       return res.json(status);
     }
-    const response = await StatusRepositories.updateStatus(status, req.body);
+    const responseValidation = await StatusValidation.update(req.body);
+    if (responseValidation.error) {
+      return res.json(responseValidation);
+    }
+    const response = await StatusRepositories.updateStatus(
+      status,
+      responseValidation
+    );
     return res.json(response);
   }
   async delete(req, res) {

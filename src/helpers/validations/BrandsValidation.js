@@ -7,11 +7,15 @@ class BrandsValidation {
       description: yup.string().required(),
     });
 
-    const response = await schema.isValid({
-      name,
-      description,
-    });
-    return response;
+    try {
+      const response = await schema.validate({
+        name,
+        description,
+      });
+      return response;
+    } catch (error) {
+      return { errors: error.errors[0] };
+    }
   }
 }
 
