@@ -1,5 +1,4 @@
 import UsersValidation from '../../helpers/validations/UsersValidation';
-import User from '../models/User';
 import UserRepositories from '../repositories/UserRepositories';
 
 class UserController {
@@ -8,14 +7,13 @@ class UserController {
     if (responseValidation.errors) {
       return res.json({ error: responseValidation.errors });
     }
-    const alreadyExists = await User.findOne({
-      where: { email: responseValidation.email },
-    });
-    if (alreadyExists) {
-      return res.json({ error: 'Email Already Exists' });
-    }
-    const user = await UserRepositories.createUser(responseValidation);
-    return res.json(user);
+    const {
+      id,
+      name,
+      email,
+      responsability,
+    } = await UserRepositories.createUser(responseValidation);
+    return res.json({ id, name, email, responsability });
   }
 
   async index(req, res) {
@@ -32,32 +30,20 @@ class UserController {
       return res.json({ error: 'You can not do this' });
     }
     const userReq = await UserRepositories.findUserById(req.params.userId);
+    if (userReq.error) {
+      return res.json({ userReq });
+    }
     if (req.userId !== userReq.id) {
       return res.json({ error: 'You can not do this' });
     }
-    const emailReq = req.body.email;
-    if (emailReq && emailReq !== userReq.email) {
-      const alreadyExists = await UserRepositories.findUserByEmail(emailReq);
-      if (alreadyExists) {
-        return res.json({ error: 'Email Already Exists' });
-      }
+    const responseValidation = await UsersValidation.update(userReq, req.body);
+    if (responseValidation.errors) {
+      return res.json(responseValidation);
     }
-    if (req.body.oldPassword) {
-      const isCorrect = await UserRepositories.checkPasswordUser(
-        userReq,
-        req.body.oldPassword
-      );
-      if (!isCorrect) {
-        return res.json({ error: 'Password does not match' });
-      }
-    }
-    const isValidPasswordYup = await UsersValidation.password(
-      req.body.password
+    const userUpdated = await UserRepositories.updateUser(
+      userReq,
+      responseValidation
     );
-    if (!isValidPasswordYup) {
-      return res.json({ error: 'Password must to be at least 6 caracters' });
-    }
-    const userUpdated = await UserRepositories.updateUser(userReq, req.body);
 
     return res.json({
       id: userUpdated.id,
@@ -77,8 +63,8 @@ class UserController {
 
   async show(req, res) {
     const userReq = await UserRepositories.findUserById(req.params.userId);
-    if (!userReq) {
-      return res.json({ error: 'User not found' });
+    if (userReq.error) {
+      return res.json(userReq);
     }
     const { id, name, email, responsability } = userReq;
     return res.json({

@@ -16,14 +16,25 @@ class UserRepositories {
     return users;
   }
   static async findUserById(id) {
-    const user = await User.findByPk(id);
-    return user;
+    try {
+      const user = await User.findByPk(id);
+      return user;
+    } catch (error) {
+      return { error };
+    }
   }
   static async findUserByEmail(email) {
-    const alreadyExists = await User.findOne({
-      where: { email },
-    });
-    return alreadyExists;
+    try {
+      const alreadyExists = await User.findOne({
+        where: { email },
+      });
+      if (!alreadyExists) {
+        return false;
+      }
+      return alreadyExists;
+    } catch (error) {
+      return { error };
+    }
   }
   static async checkPasswordUser(user, oldPassword) {
     const isCorrect = await user.checkPassword(oldPassword);
