@@ -11,7 +11,6 @@ class Customer extends Model {
         send_email: Sequelize.BOOLEAN,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
-        provider: Sequelize.BOOLEAN,
       },
       {
         sequelize,

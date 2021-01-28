@@ -27,7 +27,6 @@ class UserRepositories {
   }
   static async checkPasswordUser(user, oldPassword) {
     const isCorrect = await user.checkPassword(oldPassword);
-    console.log('checkPasswordUser', isCorrect);
     return isCorrect;
   }
   static async updateUser(user, data) {

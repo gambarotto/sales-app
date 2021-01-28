@@ -46,10 +46,4 @@ routes.put('/status/:statusId', AuthUser, StatusController.update);
 routes.get('/status/:statusId', AuthUser, StatusController.show);
 routes.delete('/status/:statusId', AuthUser, StatusController.delete);
 
-/** CUSTUMER ROUTES */
-// routes.post('/customer', AuthUser, CustomerController.store);
-// routes.get('/customer', CustomerController.index);
-// routes.put('/customer/:customerId', AuthUser, CustomerController.update);
-// routes.get('/customer/:customerId', AuthUser, CustomerController.show);
-// routes.delete('/customer/:customerId', AuthUser, CustomerController.delete);
 export default routes;
