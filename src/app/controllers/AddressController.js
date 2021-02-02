@@ -1,6 +1,5 @@
 import AddressValidation from '../../helpers/validations/AddressValidation';
 import AddressRepositories from '../repositories/AddressRepositories';
-import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 
 class AddressController {
   async store(req, res) {
@@ -17,12 +16,7 @@ class AddressController {
     return res.status(response.error ? 401 : 200).json(response);
   }
   async index(req, res) {
-    if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res
-        .status(401)
-        .json({ error: 'You do not have privileges for do this' });
-    }
-    const address = await AddressRepositories.findAllAddresses();
+    const address = await AddressRepositories.findAllAddresses(req.customerId);
     return res.status(address.error ? 404 : 200).json(address);
   }
   async update(req, res) {

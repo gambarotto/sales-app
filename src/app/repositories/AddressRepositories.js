@@ -46,12 +46,14 @@ class AddressRepositories {
       return { error };
     }
   }
-  static async findAllAddresses() {
+  static async findAllAddresses(idCustomer) {
     try {
       const brands = await Address.findAll({
+        where: {
+          id_customer: idCustomer,
+        },
         attributes: [
           'id',
-          'id_customer',
           'street',
           'number',
           'neighborhood',
