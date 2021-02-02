@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 import BrandsValidation from '../../helpers/validations/BrandsValidation';
 import BrandRepositories from '../repositories/BrandRepositories';
@@ -8,14 +7,11 @@ class BrandController {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ error: 'You do not have privileges for do this' });
     }
-    const { name, description } = req.body;
-    if (!(await BrandsValidation.store(name, description))) {
-      return res.json({ error: 'Please fill all fields' });
+    const responseValidation = await BrandsValidation.store(req.body);
+    if (responseValidation.errors) {
+      return res.json(responseValidation);
     }
-    const brand = await BrandRepositories.createBrand({
-      id: uuidv4(),
-      ...req.body,
-    });
+    const brand = await BrandRepositories.createBrand(responseValidation);
 
     return res.json(brand);
   }
@@ -32,8 +28,8 @@ class BrandController {
       return res.json({ error: 'You do not have privileges for do this' });
     }
     const brand = await BrandRepositories.findBrandById(req.params.brandId);
-    if (!brand) {
-      return res.json({ error: 'Brand not found' });
+    if (brand.error) {
+      return res.json(brand);
     }
     const brandUpdated = await BrandRepositories.updateBrand(brand, req.body);
 
@@ -45,8 +41,8 @@ class BrandController {
   }
   async show(req, res) {
     const brand = await BrandRepositories.findBrandById(req.params.brandId);
-    if (!brand) {
-      return res.json({ error: 'Brand not found' });
+    if (brand.error) {
+      return res.json(brand);
     }
     const { id, name, description } = brand;
     return res.json({ id, name, description });

@@ -3,6 +3,7 @@ import Brand from '../models/Brand';
 
 class BrandRepositories {
   static async createBrand(data) {
+    console.log(data);
     const { id, name, description } = await Brand.create({
       id: uuidv4(),
       ...data,
@@ -10,8 +11,12 @@ class BrandRepositories {
     return { id, name, description };
   }
   static async findBrandById(id) {
-    const brand = await Brand.findByPk(id);
-    return brand;
+    try {
+      const brand = await Brand.findByPk(id);
+      return brand;
+    } catch (error) {
+      return { error };
+    }
   }
   static async findAllBrands() {
     const brands = await Brand.findAll({
