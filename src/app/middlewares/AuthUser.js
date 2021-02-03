@@ -15,7 +15,6 @@ export async function AuthUser(req, res, next) {
   try {
     const decoded = await promisify(jwt.verify)(token, authConfig.secret);
     const user = await UserRepositories.findUserById(decoded.id);
-    console.log(user);
     if (!user.responsability) {
       req.userId = '';
     }

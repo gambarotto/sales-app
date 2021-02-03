@@ -6,6 +6,7 @@ import BrandController from '../app/controllers/BrandController';
 import CategoryController from '../app/controllers/CategoryController';
 import ProductController from '../app/controllers/ProductController';
 import StatusController from '../app/controllers/StatusController';
+import TypePaymentController from '../app/controllers/TypePaymentController';
 
 const routes = new Router();
 
@@ -45,5 +46,24 @@ routes.get('/status', AuthUser, StatusController.index);
 routes.put('/status/:statusId', AuthUser, StatusController.update);
 routes.get('/status/:statusId', AuthUser, StatusController.show);
 routes.delete('/status/:statusId', AuthUser, StatusController.delete);
+
+/** USERS ROUTES */
+routes.post('/type-payments', AuthUser, TypePaymentController.store);
+routes.get('/type-payments', AuthUser, TypePaymentController.index);
+routes.put(
+  '/type-payments/:typePaymentId',
+  AuthUser,
+  TypePaymentController.update
+);
+routes.get(
+  '/type-payments/:typePaymentId',
+  AuthUser,
+  TypePaymentController.show
+);
+routes.delete(
+  '/type-payments/:typePaymentId',
+  AuthUser,
+  TypePaymentController.delete
+);
 
 export default routes;

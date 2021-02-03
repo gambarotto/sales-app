@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import AddressRepositories from '../../app/repositories/AddressRepositories';
 import CustomerRepositories from '../../app/repositories/CustomerRepositories';
+import consoleError from '../errors/errors';
 
 const idOptions = {
   name: 'verify-id-customer-in-db',
@@ -20,14 +21,15 @@ class AddressValidation {
     try {
       const address = await AddressRepositories.findAddressById(idAddress);
       if (!address) {
-        return { errors: 'Validation: Address not found' };
+        return { error: 'Validation: Address not found' };
       }
       if (address.id_customer !== idToken) {
-        return { errors: 'You do not have permission' };
+        return { error: 'You do not have permission' };
       }
       return address;
-    } catch (errors) {
-      return { errors };
+    } catch (error) {
+      consoleError('AddressValidation', 'checkIfIsTheSameCustomer', error);
+      return { error: 'Error while verify Customer' };
     }
   }
   static async store(data) {
@@ -49,7 +51,8 @@ class AddressValidation {
       const response = await schema.validate({ ...data });
       return response;
     } catch (error) {
-      return { errors: error.errors[0] };
+      consoleError('AddressValidation', 'store', error);
+      return { error: error.errors[0] };
     }
   }
   static async update(address, data) {
@@ -72,7 +75,8 @@ class AddressValidation {
       const response = await schema.validate({ ...data });
       return response;
     } catch (error) {
-      return { errors: error.errors[0] };
+      consoleError('AddressValidation', 'update', error);
+      return { error: error.errors[0] };
     }
   }
 }

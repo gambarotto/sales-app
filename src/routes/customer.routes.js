@@ -5,6 +5,7 @@ import CustomerController from '../app/controllers/CustomerController';
 import AddressController from '../app/controllers/AddressController';
 import SessionController from '../app/controllers/SessionController';
 import CustomerPhonesControllers from '../app/controllers/CustomerPhonesControllers';
+import DeliveryController from '../app/controllers/DeliveryController';
 
 const routes = new Router();
 
@@ -27,6 +28,17 @@ routes.get('/adresses', AuthCustomer, AddressController.index);
 routes.put('/adresses/:addressId', AuthCustomer, AddressController.update);
 routes.get('/adresses/:addressId', AuthCustomer, AddressController.show);
 routes.delete('/adresses/:addressId', AuthCustomer, AddressController.delete);
+
+/** DELIVERIES ROUTES */
+routes.post('/deliveries', AuthCustomer, DeliveryController.store);
+routes.get('/deliveries', AuthCustomer, DeliveryController.index);
+routes.put('/deliveries/:deliveryId', AuthCustomer, DeliveryController.update);
+routes.get('/deliveries/:deliveryId', AuthCustomer, DeliveryController.show);
+routes.delete(
+  '/deliveries/:deliveryId',
+  AuthCustomer,
+  DeliveryController.delete
+);
 
 /** PHONES CUSTOMERS ROUTES */
 routes.post('/phones-customers', AuthCustomer, CustomerPhonesControllers.store);

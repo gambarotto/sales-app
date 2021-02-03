@@ -7,7 +7,7 @@ class AddressController {
       return res.status(401).json({ error: 'Please do login' });
     }
     const responseValidation = await AddressValidation.store(req.body);
-    if (responseValidation.errors) {
+    if (responseValidation.error) {
       return res.status(400).json(responseValidation);
     }
     const response = await AddressRepositories.createAddress(
@@ -24,14 +24,14 @@ class AddressController {
       req.params.addressId,
       req.customerId
     );
-    if (address.errors) {
+    if (address.error) {
       return res.status(401).json(address);
     }
     const responseValidation = await AddressValidation.update(
       address,
       req.body
     );
-    if (responseValidation.errors) {
+    if (responseValidation.error) {
       return res.status(401).json(responseValidation);
     }
     const addressUpdated = await AddressRepositories.updateAddress(
