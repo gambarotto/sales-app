@@ -10,16 +10,16 @@ class StatusRepositories {
         ...data,
       });
       return { id, name, description };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findStatusById(idReq) {
     try {
       const status = await Status.findByPk(idReq);
       return status;
-    } catch (error) {
-      return { error: 'Status not found' };
+    } catch (errors) {
+      return { errors: 'Status not found' };
     }
   }
   static async findAllStatus() {
@@ -28,24 +28,24 @@ class StatusRepositories {
         attributes: ['id', 'name', 'description'],
       });
       return status;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async updateStatus(status, data) {
     try {
       const { id, name, description } = await status.update(data);
       return { id, name, description };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async deleteStatus(status) {
     try {
       await status.destroy();
       return { message: 'Status was deleted' };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
 }

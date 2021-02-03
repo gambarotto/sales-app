@@ -9,8 +9,8 @@ class DeliveryRepositories {
         ...data,
       });
       return { id, schedule_to, date_status };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
 }

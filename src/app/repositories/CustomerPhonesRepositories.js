@@ -17,19 +17,19 @@ class CustomerPhonesRepositories {
         id_customer: customerId,
       });
       return { id, ddd, number, type, notes, id_customer };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findCustomerPhoneByPk(id) {
     try {
       const customerPhone = await CustomerPhone.findByPk(id);
       if (!customerPhone) {
-        return { error: 'Phone not found' };
+        return { errors: 'Phone not found' };
       }
       return customerPhone;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findAllCustumerPhones(id_customer) {
@@ -39,24 +39,24 @@ class CustomerPhonesRepositories {
         attributes: ['id', 'ddd', 'number', 'type', 'notes'],
       });
       return phones;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async updateCustomerPhone(customerPhone, data) {
     try {
       const response = await customerPhone.update(data);
       return response;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async deleteCustomerPhone(customerPhone) {
     try {
       await customerPhone.destroy();
       return { message: 'Phone was deleted' };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
 }

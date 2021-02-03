@@ -50,8 +50,8 @@ class Database {
         '\x1b[33m%s\x1b[0m',
         `=> 🚀 Connection with database has been established successfully`
       );
-    } catch (error) {
-      console.error('Unable to connect to the database:', error);
+    } catch (errors) {
+      console.errors('Unable to connect to the database:', errors);
     }
     //conecta os models ao db
     models

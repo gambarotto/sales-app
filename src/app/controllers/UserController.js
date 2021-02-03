@@ -5,7 +5,7 @@ class UserController {
   async store(req, res) {
     const responseValidation = await UsersValidation.store(req.body);
     if (responseValidation.errors) {
-      return res.json({ error: responseValidation.errors });
+      return res.json({ errors: responseValidation.errors });
     }
     const {
       id,
@@ -18,7 +18,7 @@ class UserController {
 
   async index(req, res) {
     if (!req.userId) {
-      return res.json({ error: 'You can not do this' });
+      return res.json({ errors: 'You can not do this' });
     }
     const users = await UserRepositories.findAllUsers();
 
@@ -27,14 +27,14 @@ class UserController {
 
   async update(req, res) {
     if (!req.userId) {
-      return res.json({ error: 'You can not do this' });
+      return res.json({ errors: 'You can not do this' });
     }
     const userReq = await UserRepositories.findUserById(req.params.userId);
-    if (userReq.error) {
+    if (userReq.errors) {
       return res.json({ userReq });
     }
     if (req.userId !== userReq.id) {
-      return res.json({ error: 'You can not do this' });
+      return res.json({ errors: 'You can not do this' });
     }
     const responseValidation = await UsersValidation.update(userReq, req.body);
     if (responseValidation.errors) {
@@ -55,7 +55,7 @@ class UserController {
 
   async delete(req, res) {
     if (!req.userId) {
-      return res.json({ error: 'You can not do this' });
+      return res.json({ errors: 'You can not do this' });
     }
     await UserRepositories.deleteUser(req.params.userId);
     return res.json({ message: 'User was deleted' });
@@ -63,7 +63,7 @@ class UserController {
 
   async show(req, res) {
     const userReq = await UserRepositories.findUserById(req.params.userId);
-    if (userReq.error) {
+    if (userReq.errors) {
       return res.json(userReq);
     }
     const { id, name, email, responsability } = userReq;

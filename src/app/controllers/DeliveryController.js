@@ -11,19 +11,19 @@ class BrandController {
       responseValidation
     );
 
-    return res.status(delivery.error ? 400 : 200).json(delivery);
+    return res.status(delivery.errors ? 400 : 200).json(delivery);
   }
   async index(req, res) {
     try {
       const brands = await DeliveryRepositories.findAllBrands();
       return res.json(brands);
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   async update(req, res) {
     const brand = await DeliveryRepositories.findBrandById(req.params.brandId);
-    if (brand.error) {
+    if (brand.errors) {
       return res.json(brand);
     }
     const brandUpdated = await DeliveryRepositories.updateBrand(
@@ -39,7 +39,7 @@ class BrandController {
   }
   async show(req, res) {
     const brand = await DeliveryRepositories.findBrandById(req.params.brandId);
-    if (brand.error) {
+    if (brand.errors) {
       return res.json(brand);
     }
     const { id, name, description } = brand;

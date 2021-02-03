@@ -10,8 +10,8 @@ class StatusValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (error) {
-      return { errors: error.errors[0] };
+    } catch (errors) {
+      return { errors: errors.errors[0] };
     }
   }
   static async update(data) {
@@ -25,8 +25,8 @@ class StatusValidation {
         description: data.description,
       });
       return response;
-    } catch (error) {
-      return { errors: error.errors[0] };
+    } catch (errors) {
+      return { errors: errors.errors[0] };
     }
   }
 }

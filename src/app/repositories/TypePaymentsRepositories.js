@@ -10,18 +10,18 @@ class TypePaymentsRepositories {
         ...data,
       });
       return { id, name, active };
-    } catch (error) {
-      consoleError('TypePaymentsRepositories', 'createTypePayments', error);
-      return { error: 'error while creating type payment' };
+    } catch (errors) {
+      consoleError('TypePaymentsRepositories', 'createTypePayments', errors);
+      return { errors: 'errors while creating type payment' };
     }
   }
   static async findByPk(id) {
     try {
       const response = await TypePayment.findByPk(id);
       return response;
-    } catch (error) {
-      consoleError('TypePaymentsRepositories', 'findByPk', error);
-      return { error: 'error while fetching type payment' };
+    } catch (errors) {
+      consoleError('TypePaymentsRepositories', 'findByPk', errors);
+      return { errors: 'errors while fetching type payment' };
     }
   }
   static async findAll() {
@@ -30,11 +30,11 @@ class TypePaymentsRepositories {
         attributes: ['id', 'name', 'active'],
       });
       if (!typePayments)
-        return { error: 'there is not type payments registered' };
+        return { errors: 'there is not type payments registered' };
       return typePayments;
-    } catch (error) {
-      consoleError('TypePaymentsRepositories', 'findAll', error);
-      return { error: 'error while fetching all types payments' };
+    } catch (errors) {
+      consoleError('TypePaymentsRepositories', 'findAll', errors);
+      return { errors: 'errors while fetching all types payments' };
     }
   }
   static async delete(id) {
@@ -42,18 +42,18 @@ class TypePaymentsRepositories {
       const typePayment = await TypePayment.findByPk(id);
       await typePayment.destroy();
       return { message: 'Type Payment was deleted' };
-    } catch (error) {
-      consoleError('TypePaymentsRepositories', 'delete', error);
-      return { error: 'error while deleting type payment' };
+    } catch (errors) {
+      consoleError('TypePaymentsRepositories', 'delete', errors);
+      return { errors: 'errors while deleting type payment' };
     }
   }
   static async updateTypePayment(typePayment, data) {
     try {
       const response = await typePayment.update(data);
       return response;
-    } catch (error) {
-      consoleError('TypePaymentsRepositories', 'updateTypePayment', error);
-      return { error: 'error while updating type payment' };
+    } catch (errors) {
+      consoleError('TypePaymentsRepositories', 'updateTypePayment', errors);
+      return { errors: 'errors while updating type payment' };
     }
   }
 }

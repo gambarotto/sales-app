@@ -6,7 +6,7 @@ const emailOptions = {
   test: async function (email) {
     const alreadyExists = await UserRepositories.findUserByEmail(email);
 
-    if (alreadyExists.error || alreadyExists) {
+    if (alreadyExists.errors || alreadyExists) {
       return false; //retorna erro no yup
     }
 

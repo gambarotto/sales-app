@@ -9,10 +9,10 @@ class SessionController {
     const { email, password } = req.body;
     const user = await UserRepositories.findUserByEmail({ where: { email } });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ errors: 'User not found' });
     }
     if (!(await user.checkPassword(password))) {
-      return res.status(400).json({ error: 'Password invalid' });
+      return res.status(400).json({ errors: 'Password invalid' });
     }
     const { id, name } = user;
     return res.json({
@@ -29,11 +29,11 @@ class SessionController {
   async customerStore(req, res) {
     const { email, password } = req.body;
     const customer = await CustomerRepositories.findCustomerByEmail(email);
-    if (customer.error || !customer) {
-      return res.status(404).json({ error: 'Customer not found' });
+    if (customer.errors || !customer) {
+      return res.status(404).json({ errors: 'Customer not found' });
     }
     if (!(await customer.checkPassword(password))) {
-      return res.status(400).json({ error: 'Password invalid' });
+      return res.status(400).json({ errors: 'Password invalid' });
     }
     const { id, name } = customer;
     return res.json({

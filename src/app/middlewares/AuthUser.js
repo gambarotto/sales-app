@@ -7,7 +7,7 @@ import UserRepositories from '../repositories/UserRepositories';
 export async function AuthUser(req, res, next) {
   const authHeaders = req.headers.authorization;
   if (!authHeaders) {
-    return res.status(400).json({ error: 'Token not provider' });
+    return res.status(400).json({ errors: 'Token not provider' });
   }
 
   const [, token] = authHeaders.split(' ');
@@ -21,7 +21,7 @@ export async function AuthUser(req, res, next) {
     req.userId = decoded.id;
     return next();
   } catch (e) {
-    return res.status(401).json({ error: 'Token invalid' });
+    return res.status(401).json({ errors: 'Token invalid' });
   }
 }
 

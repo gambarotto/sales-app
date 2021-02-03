@@ -11,9 +11,9 @@ class TypePaymentValidation {
     try {
       const response = await schema.validate(data);
       return response;
-    } catch (error) {
-      consoleError('TypePaymentsValidation', 'store', error);
-      return { error: error.message };
+    } catch (errors) {
+      consoleError('TypePaymentsValidation', 'store', errors);
+      return { errors: errors.message };
     }
   }
   static async update(data) {
@@ -24,9 +24,9 @@ class TypePaymentValidation {
     try {
       const response = await schema.validate(data);
       return response;
-    } catch (error) {
-      consoleError('TypePaymentsValidation', 'update', error);
-      return { error: error.message };
+    } catch (errors) {
+      consoleError('TypePaymentsValidation', 'update', errors);
+      return { errors: errors.message };
     }
   }
 }

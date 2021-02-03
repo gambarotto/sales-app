@@ -6,7 +6,7 @@ import authConfig from '../../config/auth';
 async function CustomerUser(req, res, next) {
   const authHeaders = req.headers.authorization;
   if (!authHeaders) {
-    return res.status(400).json({ error: 'Token not provider' });
+    return res.status(400).json({ errors: 'Token not provider' });
   }
 
   const [, token] = authHeaders.split(' ');
@@ -16,7 +16,7 @@ async function CustomerUser(req, res, next) {
     req.customerId = decoded.id;
     return next();
   } catch (e) {
-    return res.status(401).json({ error: 'Token invalid' });
+    return res.status(401).json({ errors: 'Token invalid' });
   }
 }
 

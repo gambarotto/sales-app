@@ -7,11 +7,11 @@ import CategoryRepositories from '../repositories/CategoryRepositories';
 class ProductController {
   async store(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ error: 'You do not have privileges for do this' });
+      return res.json({ errors: 'You do not have privileges for do this' });
     }
     const responseValidation = await ProductsValidation.store(req.body);
     if (responseValidation.errors) {
-      return res.json({ error: responseValidation.errors });
+      return res.json({ errors: responseValidation.errors });
     }
 
     const product = await ProductRepositories.createProduct(responseValidation);
@@ -23,18 +23,18 @@ class ProductController {
   }
   async update(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ error: 'You do not have privileges for do this' });
+      return res.json({ errors: 'You do not have privileges for do this' });
     }
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
     if (!product) {
-      return res.json({ error: 'Product not found' });
+      return res.json({ errors: 'Product not found' });
     }
     if (req.body.idBrand) {
       const brandReq = await BrandRepositories.findBrandById(req.body.idBrand);
       if (!brandReq) {
-        return res.json({ error: 'Brand not found' });
+        return res.json({ errors: 'Brand not found' });
       }
     }
     if (req.body.idCategory) {
@@ -42,7 +42,7 @@ class ProductController {
         req.body.idCategory
       );
       if (!categoryReq) {
-        return res.json({ error: 'Category not found' });
+        return res.json({ errors: 'Category not found' });
       }
     }
     const productUpdated = await ProductRepositories.updateProduct(
@@ -54,19 +54,19 @@ class ProductController {
   }
   async delete(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ error: 'You do not have privileges for do this' });
+      return res.json({ errors: 'You do not have privileges for do this' });
     }
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
     if (!product) {
-      return res.json({ error: 'Product not found' });
+      return res.json({ errors: 'Product not found' });
     }
     try {
       await ProductRepositories.deleteProduct(product);
       return res.json({ message: 'Product was deleted' });
-    } catch (error) {
-      return res.json({ error });
+    } catch (errors) {
+      return res.json({ errors });
     }
   }
   async show(req, res) {
@@ -74,7 +74,7 @@ class ProductController {
       req.params.productId
     );
     if (!product) {
-      return res.json({ error: 'Product not found' });
+      return res.json({ errors: 'Product not found' });
     }
     return res.json(product);
   }

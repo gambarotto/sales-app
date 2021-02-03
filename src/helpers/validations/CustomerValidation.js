@@ -5,7 +5,7 @@ const storeEmailOptions = {
   name: 'verify-email-in-db',
   test: async function (email) {
     const alreadyExists = await CustomerRepositories.findCustomerByEmail(email);
-    if (alreadyExists.error || alreadyExists) {
+    if (alreadyExists.errors || alreadyExists) {
       return false; //retorna erro no yup
     }
     return true; //passou no teste

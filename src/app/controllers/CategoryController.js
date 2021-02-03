@@ -1,63 +1,54 @@
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
-import CategoriesValidation from '../../helpers/validations/CategoriesValidation';
+import CategoriesValidation from '../../helpers/validations/CategoryValidation';
 import CategoryRepositories from '../repositories/CategoryRepositories';
+import CategoriyValidation from '../../helpers/validations/CategoryValidation';
 
 class CategoryController {
   async store(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ error: 'You do not have privileges for do this' });
+      return res
+        .status(401)
+        .json({ errors: 'You do not have privileges for do this' });
     }
-    if (!(await CategoriesValidation.store(req.body))) {
-      return res.json({ error: 'Please fill all fields' });
+    const resValidation = await CategoriyValidation.store(req.body);
+    if (resValidation.errors) {
+      return res.status(400).json(resValidation);
     }
-    const alreadyExists = await CategoryRepositories.findCategoryByName({
-      where: { name: req.body.name },
-    });
-    if (alreadyExists) {
-      return res.json({ error: 'Category already exists' });
-    }
-    const category = await CategoryRepositories.createCategory(req.body);
-    return res.json(category);
+    const category = await CategoryRepositories.createCategory(resValidation);
+    return res.status(category.errors ? 400 : 200).json(category);
   }
   async index(req, res) {
     const response = await CategoryRepositories.findAllCategories();
-    return res.json(response);
+    return res.status(response.errors ? 400 : 200).json(response);
   }
   async update(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ error: 'You do not have privileges for do this' });
+      return res.json({ errors: 'You do not have privileges for do this' });
     }
-    console.log('aq0');
     const category = await CategoryRepositories.findCategoryById(
       req.params.categoryId
     );
-    console.log('aq');
-    if (!category) {
-      return res.json({ error: 'Category not found' });
+    if (category.errors) {
+      return res.status(400).json(category);
     }
     const response = await CategoryRepositories.updateCategory(
       category,
       req.body
     );
-    return res.json(response);
+    return res.status(response.errors ? 400 : 200).json(response);
   }
   async delete(req, res) {
-    const category = await CategoryRepositories.findCategoryById(
+    const response = await CategoryRepositories.deleteCategory(
       req.params.categoryId
     );
-    if (!category) {
-      return res.json({ error: 'Category not found' });
-    }
-    const response = await CategoryRepositories.deleteCategory(category);
-
-    return res.json(response);
+    return res.status(response.errors ? 400 : 200).json(response);
   }
   async show(req, res) {
     const category = await CategoryRepositories.findCategoryById(
       req.params.categoryId
     );
-    if (!category) {
-      return res.json({ error: 'Category not found' });
+    if (category.errors) {
+      return res.status(400).json(category);
     }
     const { id, name, description } = category;
     return res.json({ id, name, description });

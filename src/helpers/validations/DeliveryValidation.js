@@ -10,8 +10,8 @@ class BrandsValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (error) {
-      return { errors: error.errors[0] };
+    } catch (errors) {
+      return { errors: errors.errors[0] };
     }
   }
   static async update(brand, data) {
@@ -22,8 +22,8 @@ class BrandsValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (error) {
-      return { errors: error.errors[0] };
+    } catch (errors) {
+      return { errors: errors.errors[0] };
     }
   }
 }

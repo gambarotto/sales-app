@@ -12,7 +12,7 @@ const optionsDelivery = {
       const response = await AddressRepositories.findByPk(value);
       if (!response) return false;
       return true;
-    } catch (error) {
+    } catch (errors) {
       return false;
     }
   },
@@ -26,7 +26,7 @@ const optionsTypePayments = {
       const response = await TypePaymentsRepositories.findByPk(value);
       if (!response) return false;
       return true;
-    } catch (error) {
+    } catch (errors) {
       return false;
     }
   },
@@ -40,7 +40,7 @@ const optionsAddress = {
       const response = await AddressRepositories.findByPk(value);
       if (!response) return false;
       return true;
-    } catch (error) {
+    } catch (errors) {
       return false;
     }
   },
@@ -54,7 +54,7 @@ const optionsStatus = {
       const response = await StatusRepositories.findByPk(value);
       if (!response) return false;
       return true;
-    } catch (error) {
+    } catch (errors) {
       return false;
     }
   },
@@ -74,8 +74,8 @@ class OrderValidation {
     try {
       const response = await schema.validate(data);
       return response;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
 }

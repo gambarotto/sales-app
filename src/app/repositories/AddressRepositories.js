@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { consoleError } from '../../helpers/errors/errors';
 import Address from '../models/Address';
 
 class AddressRepositories {
@@ -31,19 +32,21 @@ class AddressRepositories {
         zipcode,
         type_address,
       };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'createAddress', errors);
+      return { errors: 'Error while create address' };
     }
   }
   static async findAddressById(id) {
     try {
       const address = await Address.findByPk(id);
       if (!address) {
-        return { error: 'Address not found' };
+        return { errors: 'Address not found' };
       }
       return address;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'findAddressById', errors);
+      return { errors: 'Error while fetching address' };
     }
   }
   static async findAllAddresses(idCustomer) {
@@ -65,16 +68,18 @@ class AddressRepositories {
         ],
       });
       return brands;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'findAllAddresses', errors);
+      return { errors: 'Error while fetching all address' };
     }
   }
   static async findAddressByIdCustomer(idCustomer) {
     try {
       const address = Address.findOne({ where: { id_customer: idCustomer } });
       return address;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'findAddressByIdCustomer', errors);
+      return { errors: 'Error while fetching address by customer' };
     }
   }
   static async updateAddress(address, data) {
@@ -101,20 +106,22 @@ class AddressRepositories {
         zipcode,
         type_address,
       };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'updateAddress', errors);
+      return { errors: 'Error while updating address' };
     }
   }
   static async deleteAddress(id) {
     try {
       const address = await Address.findByPk(id);
       if (!address) {
-        return { error: 'Address not found' };
+        return { errors: 'Address not found' };
       }
       await address.destroy();
       return { message: 'The address was deleted' };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      consoleError('AddressRepositories', 'deleteAddress', errors);
+      return { errors: 'Error while updating address' };
     }
   }
 }

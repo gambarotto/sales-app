@@ -25,12 +25,12 @@ const nodeTips = {
   BGcyan: '\x1b[46m',
   BGwhite: '\x1b[47m',
 };
-export function consoleError(nameFile = '', nameFunction = 'e', error) {
+export function consoleError(nameFile = '', nameFunction = 'e', errors) {
   return console.error(
     nodeTips.red,
     nodeTips.bright,
     `${nameFile} :: ${nodeTips.yellow}${nameFunction} => ${nodeTips.green}`,
-    error,
+    errors,
     nodeTips.reset
   );
 }

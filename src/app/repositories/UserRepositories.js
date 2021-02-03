@@ -19,8 +19,8 @@ class UserRepositories {
     try {
       const user = await User.findByPk(id);
       return user;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findUserByEmail(email) {
@@ -32,8 +32,8 @@ class UserRepositories {
         return false;
       }
       return alreadyExists;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async checkPasswordUser(user, oldPassword) {

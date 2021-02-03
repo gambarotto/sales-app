@@ -4,7 +4,7 @@ import CustomerPhonesRepositories from '../repositories/CustomerPhonesRepositori
 class CustomerPhones {
   async store(req, res) {
     if (!req.customerId) {
-      return res.status(401).json({ error: 'Pleade do login' });
+      return res.status(401).json({ errors: 'Pleade do login' });
     }
     const resValidation = await CustomerPhonesValidation.store(req.body);
     if (resValidation.errors) {
@@ -14,13 +14,13 @@ class CustomerPhones {
       resValidation,
       req.customerId
     );
-    return res.status(customerPhone.error ? 400 : 200).json(customerPhone);
+    return res.status(customerPhone.errors ? 400 : 200).json(customerPhone);
   }
   async index(req, res) {
     const custumerPhones = await CustomerPhonesRepositories.findAllCustumerPhones(
       req.customerId
     );
-    if (custumerPhones.error) {
+    if (custumerPhones.errors) {
       return res.status(404).json(custumerPhones);
     }
     return res.status(200).json(custumerPhones);
@@ -44,7 +44,7 @@ class CustomerPhones {
       customerPhone,
       resValidation
     );
-    return res.status(phoneUpdated.error ? 400 : 200).json(phoneUpdated);
+    return res.status(phoneUpdated.errors ? 400 : 200).json(phoneUpdated);
   }
   async delete(req, res) {
     const customerPhone = await CustomerPhonesValidation.checkIfIsTheSameCustomer(
@@ -55,7 +55,7 @@ class CustomerPhones {
       return res.status(404).json(customerPhone);
     }
     await CustomerPhonesRepositories.deleteCustomerPhone(customerPhone);
-    return res.status(customerPhone.error ? 400 : 200).json(customerPhone);
+    return res.status(customerPhone.errors ? 400 : 200).json(customerPhone);
   }
   async show(req, res) {
     const customerPhone = await CustomerPhonesValidation.checkIfIsTheSameCustomer(
@@ -69,7 +69,7 @@ class CustomerPhones {
     const response = await CustomerPhonesRepositories.findCustomerPhoneByPk(
       customerPhone.id
     );
-    return res.status(response.error ? 400 : 200).json(response);
+    return res.status(response.errors ? 400 : 200).json(response);
   }
 }
 export default new CustomerPhones();

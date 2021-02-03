@@ -5,19 +5,19 @@ class CustomerController {
   async store(req, res) {
     const responseValidation = await CustomerValidation.store(req.body);
     if (responseValidation.errors) {
-      return res.json({ error: responseValidation.errors });
+      return res.json({ errors: responseValidation.errors });
     }
     const customer = await CustomerRepositories.createCustomer(
       responseValidation
     );
-    if (customer.error) {
+    if (customer.errors) {
       return res.json(customer);
     }
     return res.json(customer);
   }
   async index(req, res) {
     const customers = await CustomerRepositories.findAllCustomers();
-    if (customers.error) {
+    if (customers.errors) {
       return res.json(customers);
     }
     return res.json(customers);

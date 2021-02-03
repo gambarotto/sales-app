@@ -15,8 +15,8 @@ class CustomerRepositories {
         ...data,
       });
       return { id, name, email, date_of_birth, send_email };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findAllCustomers() {
@@ -25,16 +25,16 @@ class CustomerRepositories {
         attributes: ['id', 'name', 'email', 'date_of_birth', 'send_email'],
       });
       return customers;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findCustomerById(id) {
     try {
       const customer = await Customer.findByPk(id);
       return customer;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async findCustomerByEmail(email) {
@@ -46,8 +46,8 @@ class CustomerRepositories {
         return false;
       }
       return alreadyExists;
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async checkPasswordCustomer(customer, oldPassword) {
@@ -70,8 +70,8 @@ class CustomerRepositories {
         date_of_birth,
         send_email,
       };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
   static async deleteCustomer(id) {
@@ -79,8 +79,8 @@ class CustomerRepositories {
       const customer = await Customer.findByPk(id);
       await customer.destroy();
       return { message: 'Customer was deleted' };
-    } catch (error) {
-      return { error };
+    } catch (errors) {
+      return { errors };
     }
   }
 }

@@ -1,13 +1,13 @@
 import * as yup from 'yup';
 import AddressRepositories from '../../app/repositories/AddressRepositories';
 import CustomerRepositories from '../../app/repositories/CustomerRepositories';
-import consoleError from '../errors/errors';
+import consoleerrors from '../errors/errors';
 
 const idOptions = {
   name: 'verify-id-customer-in-db',
   test: async function (idAddress) {
     const customer = CustomerRepositories.findCustomerById(idAddress);
-    if (customer.error || !customer) {
+    if (customer.errors || !customer) {
       return false;
     }
     return true;
@@ -21,15 +21,15 @@ class AddressValidation {
     try {
       const address = await AddressRepositories.findAddressById(idAddress);
       if (!address) {
-        return { error: 'Validation: Address not found' };
+        return { errors: 'Validation: Address not found' };
       }
       if (address.id_customer !== idToken) {
-        return { error: 'You do not have permission' };
+        return { errors: 'You do not have permission' };
       }
       return address;
-    } catch (error) {
-      consoleError('AddressValidation', 'checkIfIsTheSameCustomer', error);
-      return { error: 'Error while verify Customer' };
+    } catch (errors) {
+      consoleerrors('AddressValidation', 'checkIfIsTheSameCustomer', errors);
+      return { errors: 'errors while verify Customer' };
     }
   }
   static async store(data) {
@@ -50,9 +50,9 @@ class AddressValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (error) {
-      consoleError('AddressValidation', 'store', error);
-      return { error: error.errors[0] };
+    } catch (errors) {
+      consoleerrors('AddressValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
   static async update(address, data) {
@@ -74,9 +74,9 @@ class AddressValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (error) {
-      consoleError('AddressValidation', 'update', error);
-      return { error: error.errors[0] };
+    } catch (errors) {
+      consoleerrors('AddressValidation', 'update', errors);
+      return { errors: errors.errors[0] };
     }
   }
 }
