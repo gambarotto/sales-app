@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { consoleError } from '../../helpers/errors/errors';
 import Customer from '../models/Customer';
 
 class CustomerRepositories {
@@ -16,7 +17,8 @@ class CustomerRepositories {
       });
       return { id, name, email, date_of_birth, send_email };
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'createCustomer', errors);
+      return { errors: 'Error while create customer' };
     }
   }
   static async findAllCustomers() {
@@ -24,17 +26,22 @@ class CustomerRepositories {
       const customers = await Customer.findAll({
         attributes: ['id', 'name', 'email', 'date_of_birth', 'send_email'],
       });
+      if (customers.errors)
+        return { errors: 'There is no categories registred' };
       return customers;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'findAllCustomers', errors);
+      return { errors: 'Error while fetching customers' };
     }
   }
   static async findCustomerById(id) {
     try {
       const customer = await Customer.findByPk(id);
+      if (!customer) return { errors: 'Customer not found' };
       return customer;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'findCustomerById', errors);
+      return { errors: 'Error while fetching customer' };
     }
   }
   static async findCustomerByEmail(email) {
@@ -43,16 +50,22 @@ class CustomerRepositories {
         where: { email },
       });
       if (!alreadyExists) {
-        return false;
+        return { errors: 'Customer not found' };
       }
       return alreadyExists;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'findCustomerByEmail', errors);
+      return { errors: 'Error while fetching customer by email' };
     }
   }
   static async checkPasswordCustomer(customer, oldPassword) {
-    const isCorrect = await customer.checkPassword(oldPassword);
-    return isCorrect;
+    try {
+      const isCorrect = await customer.checkPassword(oldPassword);
+      return isCorrect;
+    } catch (errors) {
+      consoleError('CustomerRepositories', 'checkPasswordCustomer', errors);
+      return { errors: 'Error while verify password' };
+    }
   }
   static async updateCustomer(customer, data) {
     try {
@@ -71,7 +84,8 @@ class CustomerRepositories {
         send_email,
       };
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'updateCustomer', errors);
+      return { errors: 'Error while updating customer' };
     }
   }
   static async deleteCustomer(id) {
@@ -80,8 +94,10 @@ class CustomerRepositories {
       await customer.destroy();
       return { message: 'Customer was deleted' };
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerRepositories', 'deleteCustomer', errors);
+      return { errors: 'Error while delete customer' };
     }
   }
 }
+
 export default CustomerRepositories;

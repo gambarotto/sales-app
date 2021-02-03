@@ -1,12 +1,13 @@
 import * as yup from 'yup';
 import CustomerRepositories from '../../app/repositories/CustomerRepositories';
+import { consoleError } from '../errors/errors';
 
 const storeEmailOptions = {
   name: 'verify-email-in-db',
   test: async function (email) {
     const alreadyExists = await CustomerRepositories.findCustomerByEmail(email);
     if (alreadyExists.errors || alreadyExists) {
-      return false; //retorna erro no yup
+      if (alreadyExists.errors !== 'Customer not found') return false; //retorna erro no yup
     }
     return true; //passou no teste
   },
@@ -33,8 +34,9 @@ class CustomerValidation {
         password: data.password,
       });
       return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    } catch (errors) {
+      consoleError('CustomerValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
   static async update(customer, data) {
@@ -54,8 +56,9 @@ class CustomerValidation {
     if (data.email && data.email !== customer.email) {
       try {
         await emailValidation.validate(data.email);
-      } catch (err) {
-        return { errors: err.errors[0] };
+      } catch (errors) {
+        consoleError('CustomerValidation', 'update:email', errors);
+        return { errors: errors.errors[0] };
       }
     }
     if (data.oldPassword) {
@@ -68,8 +71,9 @@ class CustomerValidation {
       } else {
         try {
           await pwd.validate(data.password);
-        } catch (err) {
-          return { errors: err.errors[0] };
+        } catch (errors) {
+          consoleError('CustomerValidation', 'update:password', errors);
+          return { errors: errors.errors[0] };
         }
       }
     }
@@ -77,8 +81,9 @@ class CustomerValidation {
     try {
       const response = await schema.validate({ ...data });
       return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    } catch (errors) {
+      consoleError('CustomerValidation', 'update', errors);
+      return { errors: errors.errors[0] };
     }
   }
 }
