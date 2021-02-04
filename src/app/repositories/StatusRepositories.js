@@ -1,5 +1,5 @@
 import Status from '../models/Status';
-
+import { consoleError } from '../../helpers/errors/errors';
 import { v4 as uuidv4 } from 'uuid';
 
 class StatusRepositories {
@@ -11,15 +11,18 @@ class StatusRepositories {
       });
       return { id, name, description };
     } catch (errors) {
-      return { errors };
+      consoleError('StatusRepositories', 'createStatus', errors);
+      return { errors: 'error while create status' };
     }
   }
   static async findStatusById(idReq) {
     try {
       const status = await Status.findByPk(idReq);
+      if (!status) return { errors: 'status not found' };
       return status;
     } catch (errors) {
-      return { errors: 'Status not found' };
+      consoleError('StatusRepositories', 'createStatus', errors);
+      return { errors: 'error while fetch status' };
     }
   }
   static async findAllStatus() {
@@ -29,7 +32,8 @@ class StatusRepositories {
       });
       return status;
     } catch (errors) {
-      return { errors };
+      consoleError('StatusRepositories', 'findAllStatus', errors);
+      return { errors: 'error while fetch status' };
     }
   }
   static async updateStatus(status, data) {
@@ -37,7 +41,8 @@ class StatusRepositories {
       const { id, name, description } = await status.update(data);
       return { id, name, description };
     } catch (errors) {
-      return { errors };
+      consoleError('StatusRepositories', 'updateStatus', errors);
+      return { errors: 'error while update status' };
     }
   }
   static async deleteStatus(status) {
@@ -45,7 +50,8 @@ class StatusRepositories {
       await status.destroy();
       return { message: 'Status was deleted' };
     } catch (errors) {
-      return { errors };
+      consoleError('StatusRepositories', 'deleteStatus', errors);
+      return { errors: 'error while delete status' };
     }
   }
 }

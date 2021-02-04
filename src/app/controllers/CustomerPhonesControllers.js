@@ -54,8 +54,10 @@ class CustomerPhones {
     if (customerPhone.errors) {
       return res.status(404).json(customerPhone);
     }
-    await CustomerPhonesRepositories.deleteCustomerPhone(customerPhone);
-    return res.status(customerPhone.errors ? 400 : 200).json(customerPhone);
+    const response = await CustomerPhonesRepositories.deleteCustomerPhone(
+      customerPhone
+    );
+    return res.status(response.errors ? 400 : 200).json(customerPhone);
   }
   async show(req, res) {
     const customerPhone = await CustomerPhonesValidation.checkIfIsTheSameCustomer(
@@ -65,7 +67,6 @@ class CustomerPhones {
     if (customerPhone.errors) {
       return res.status(404).json(customerPhone);
     }
-    console.log('customerPhone');
     const response = await CustomerPhonesRepositories.findCustomerPhoneByPk(
       customerPhone.id
     );

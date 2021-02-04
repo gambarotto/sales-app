@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import CustomerPhonesRepositories from '../../app/repositories/CustomerPhonesRepositories';
+import { consoleError } from '../errors/errors';
 
 class CustomerPhonesValidation {
   static async checkIfIsTheSameCustomer(idPhones, idTokenCustomer) {
@@ -15,7 +16,12 @@ class CustomerPhonesValidation {
       }
       return customerPhone;
     } catch (errors) {
-      return { errors };
+      consoleError(
+        'CustomerPhonesValidation',
+        'checkIfIsTheSameCustomer',
+        errors
+      );
+      return { errors: 'error while check customer' };
     }
   }
   static async store(data) {
@@ -29,7 +35,8 @@ class CustomerPhonesValidation {
       const response = await schema.validate(data);
       return response;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerPhonesValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
   static async update(customerPhone, data) {
@@ -48,7 +55,8 @@ class CustomerPhonesValidation {
       const response = await schema.validate(data);
       return response;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerPhonesValidation', 'update', errors);
+      return { errors: errors.errors[0] };
     }
   }
 }

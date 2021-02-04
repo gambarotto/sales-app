@@ -18,6 +18,7 @@ class BrandRepositories {
   static async findBrandById(id) {
     try {
       const brand = await Brand.findByPk(id);
+      if (!brand) return { errors: 'Brand not found' };
       return brand;
     } catch (errors) {
       consoleError('BrandRepositories', 'findBrandById', errors);

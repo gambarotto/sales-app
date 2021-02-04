@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import UserRepositories from '../../app/repositories/UserRepositories';
+import { consoleError } from '../errors/errors';
 
 const emailOptions = {
   name: 'verify-email-in-db',
@@ -7,6 +8,9 @@ const emailOptions = {
     const alreadyExists = await UserRepositories.findUserByEmail(email);
 
     if (alreadyExists.errors || alreadyExists) {
+      if (alreadyExists.errors && alreadyExists.errors === 'user not found') {
+        return true;
+      }
       return false; //retorna erro no yup
     }
 
@@ -28,15 +32,11 @@ class UsersValidation {
     });
 
     try {
-      const response = await schema.validate({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        responsability: data.responsability,
-      });
+      const response = await schema.validate(data);
       return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    } catch (errors) {
+      consoleError('UsersValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
   static async update(user, data) {
@@ -60,7 +60,8 @@ class UsersValidation {
       try {
         await email.validate(data.email);
       } catch (errors) {
-        return { errors };
+        consoleError('UsersValidation', 'update:email', errors);
+        return { errors: errors.errors[0] };
       }
     }
     if (data.oldPassword) {
@@ -74,35 +75,17 @@ class UsersValidation {
       try {
         await passwordValidation.validate(data.password);
       } catch (errors) {
-        return { errors };
+        consoleError('UsersValidation', 'update:password', errors);
+        return { errors: errors.errors[0] };
       }
     }
     try {
       const response = await schema.validate({ ...data });
-
       return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    } catch (errors) {
+      consoleError('UsersValidation', 'update', errors);
+      return { errors: errors.errors[0] };
     }
-  }
-  static async email(email) {
-    const schema = yup
-      .object()
-      .shape({ email: yup.string().email().required() });
-    const response = await schema.isValid({ email });
-    return response;
-  }
-  static async password(password) {
-    const schema = yup.string().min(6).required();
-    const response = await schema.isValid(password);
-    return response;
-  }
-  static async responsability(responsability) {
-    const schema = yup.string().matches(/(administrator|manager|employee)/, {
-      excludeEmptyString: true,
-    });
-    const response = await schema.isValid({ responsability });
-    return response;
   }
 }
 export default UsersValidation;

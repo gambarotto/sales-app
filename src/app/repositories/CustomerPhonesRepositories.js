@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import CustomerPhone from '../models/CustomerPhone';
+import { consoleError } from '../../helpers/errors/errors';
 
 class CustomerPhonesRepositories {
   static async createCustomerPhone(data, customerId) {
@@ -18,7 +19,8 @@ class CustomerPhonesRepositories {
       });
       return { id, ddd, number, type, notes, id_customer };
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerPhonesRepositories', 'createCustomerPhone', errors);
+      return { errors: 'error while create customer phone' };
     }
   }
   static async findCustomerPhoneByPk(id) {
@@ -29,7 +31,12 @@ class CustomerPhonesRepositories {
       }
       return customerPhone;
     } catch (errors) {
-      return { errors };
+      consoleError(
+        'CustomerPhonesRepositories',
+        'findCustomerPhoneByPk',
+        errors
+      );
+      return { errors: 'error while fetching customer phone' };
     }
   }
   static async findAllCustumerPhones(id_customer) {
@@ -40,7 +47,12 @@ class CustomerPhonesRepositories {
       });
       return phones;
     } catch (errors) {
-      return { errors };
+      consoleError(
+        'CustomerPhonesRepositories',
+        'findAllCustumerPhones',
+        errors
+      );
+      return { errors: 'error while fetching customer phones' };
     }
   }
   static async updateCustomerPhone(customerPhone, data) {
@@ -48,7 +60,8 @@ class CustomerPhonesRepositories {
       const response = await customerPhone.update(data);
       return response;
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerPhonesRepositories', 'updateCustomerPhone', errors);
+      return { errors: 'error while updating customer phone' };
     }
   }
   static async deleteCustomerPhone(customerPhone) {
@@ -56,7 +69,8 @@ class CustomerPhonesRepositories {
       await customerPhone.destroy();
       return { message: 'Phone was deleted' };
     } catch (errors) {
-      return { errors };
+      consoleError('CustomerPhonesRepositories', 'deleteCustomerPhone', errors);
+      return { errors: 'error while delete customer phone' };
     }
   }
 }

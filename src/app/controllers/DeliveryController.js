@@ -5,7 +5,7 @@ class BrandController {
   async store(req, res) {
     const responseValidation = await DeliveryValidation.store(req.body);
     if (responseValidation.errors) {
-      return res.json(responseValidation);
+      return res.status(400).json(responseValidation);
     }
     const delivery = await DeliveryRepositories.createDelivery(
       responseValidation

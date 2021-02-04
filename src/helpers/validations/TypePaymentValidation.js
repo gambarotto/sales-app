@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import { consoleError } from '../errors/errors';
-//import TypePaymentsRepositories from '../../app/repositories/TypePaymentsRepositories';
 
 class TypePaymentValidation {
   static async store(data) {
@@ -13,7 +12,7 @@ class TypePaymentValidation {
       return response;
     } catch (errors) {
       consoleError('TypePaymentsValidation', 'store', errors);
-      return { errors: errors.message };
+      return { errors: errors.errors[0] };
     }
   }
   static async update(data) {
@@ -26,7 +25,7 @@ class TypePaymentValidation {
       return response;
     } catch (errors) {
       consoleError('TypePaymentsValidation', 'update', errors);
-      return { errors: errors.message };
+      return { errors: errors.errors[0] };
     }
   }
 }

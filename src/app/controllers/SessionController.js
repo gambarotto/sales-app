@@ -7,9 +7,9 @@ import CustomerRepositories from '../repositories/CustomerRepositories';
 class SessionController {
   async adminStore(req, res) {
     const { email, password } = req.body;
-    const user = await UserRepositories.findUserByEmail({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ errors: 'User not found' });
+    const user = await UserRepositories.findUserByEmail(email);
+    if (user.errors) {
+      return res.status(404).json(user);
     }
     if (!(await user.checkPassword(password))) {
       return res.status(400).json({ errors: 'Password invalid' });
@@ -29,8 +29,8 @@ class SessionController {
   async customerStore(req, res) {
     const { email, password } = req.body;
     const customer = await CustomerRepositories.findCustomerByEmail(email);
-    if (customer.errors || !customer) {
-      return res.status(404).json({ errors: 'Customer not found' });
+    if (customer.errors) {
+      return res.status(404).json(customer);
     }
     if (!(await customer.checkPassword(password))) {
       return res.status(400).json({ errors: 'Password invalid' });

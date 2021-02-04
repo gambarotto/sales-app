@@ -1,12 +1,13 @@
 import * as yup from 'yup';
-import Category from '../../app/models/Category';
-import Brand from '../../app/models/Brand';
+import { consoleError } from '../errors/errors';
+import BrandRepositories from '../../app/repositories/BrandRepositories';
+import CategoryRepositories from '../../app/repositories/CategoryRepositories';
 
 const optionsBrand = {
-  name: 'verify-category-in-db',
+  name: 'verify-brand-in-db',
   test: async function (value) {
-    const brand = await Brand.findByPk(value);
-    if (!brand) {
+    const brand = await BrandRepositories.findBrandById(value);
+    if (brand.errors) {
       return false;
     }
     return true;
@@ -17,8 +18,8 @@ const optionsBrand = {
 const optionsCategory = {
   name: 'verify-category-in-db',
   test: async function (value) {
-    const category = await Category.findByPk(value);
-    if (!category) {
+    const category = await CategoryRepositories.findCategoryById(value);
+    if (category.errors) {
       return false;
     }
     return true;
@@ -59,44 +60,59 @@ class ProductsValidation {
         id_category: data.id_category,
       });
       return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    } catch (errors) {
+      consoleError('ProductsValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
-  static string(data) {
-    const schema = yup.string();
-    try {
-      const response = schema.validate(data);
-      return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+  static async update(product, data) {
+    const schema = yup.object().shape({
+      name: yup.string().required().default(product.name),
+      description: yup.string().required().default(product.description),
+      cost_price: yup
+        .number()
+        .positive('The value must be more than 0')
+        .required()
+        .default(product.cost_price),
+      sale_price: yup
+        .number()
+        .positive('The value must be more than 0')
+        .required()
+        .default(product.sale_price),
+      weight: yup.string().default(product.weight),
+    });
+    const brandSchema = yup
+      .string()
+      .required()
+      .test(optionsBrand)
+      .default(product.id_brand);
+    const categorySchema = yup
+      .string()
+      .required()
+      .test(optionsCategory)
+      .default(product.id_category);
+    if (data.id_brand && data.id_brand !== product.id_brand) {
+      try {
+        await brandSchema.validate(data.id_brand);
+      } catch (errors) {
+        consoleError('ProductsValidation', 'update:id_category', errors);
+        return { errors: errors.errors[0] };
+      }
     }
-  }
-  static number(data) {
-    const schema = yup.number().positive('The value must be more than 0');
-    try {
-      const response = schema.validate(data);
-      return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+    if (data.id_category && data.id_category !== data.id_category) {
+      try {
+        await categorySchema.validate(data.id_category);
+      } catch (errors) {
+        consoleError('ProductsValidation', 'update:id_category', errors);
+        return { errors: errors.errors[0] };
+      }
     }
-  }
-  static brand(data) {
-    const schema = yup.string().test(optionsBrand);
     try {
-      const response = schema.validate(data);
-      return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
-    }
-  }
-  static category(data) {
-    const schema = yup.string().test(optionsCategory);
-    try {
-      const response = schema.validate(data);
-      return response;
-    } catch (err) {
-      return { errors: err.errors[0] };
+      await schema.validate(data);
+      return data;
+    } catch (errors) {
+      consoleError('ProductsValidation', 'store', errors);
+      return { errors: errors.errors[0] };
     }
   }
 }

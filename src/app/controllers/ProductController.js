@@ -7,19 +7,21 @@ import CategoryRepositories from '../repositories/CategoryRepositories';
 class ProductController {
   async store(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
-      return res.json({ errors: 'You do not have privileges for do this' });
+      return res
+        .status(401)
+        .json({ errors: 'You do not have privileges for do this' });
     }
     const responseValidation = await ProductsValidation.store(req.body);
     if (responseValidation.errors) {
-      return res.json({ errors: responseValidation.errors });
+      return res.status(400).json(responseValidation);
     }
 
     const product = await ProductRepositories.createProduct(responseValidation);
-    return res.json(product);
+    return res.status(product.errors ? 400 : 200).json(product);
   }
   async index(req, res) {
     const products = await ProductRepositories.findAllProducts();
-    return res.json(products);
+    return res.status(products.errors ? 400 : 200).json(products);
   }
   async update(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
@@ -28,29 +30,18 @@ class ProductController {
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
-    if (!product) {
-      return res.json({ errors: 'Product not found' });
+    if (product.errors) {
+      return res.status(400).json({ product });
     }
-    if (req.body.idBrand) {
-      const brandReq = await BrandRepositories.findBrandById(req.body.idBrand);
-      if (!brandReq) {
-        return res.json({ errors: 'Brand not found' });
-      }
-    }
-    if (req.body.idCategory) {
-      const categoryReq = await CategoryRepositories.findCategoryById(
-        req.body.idCategory
-      );
-      if (!categoryReq) {
-        return res.json({ errors: 'Category not found' });
-      }
-    }
+    const resValidation = await ProductsValidation.update(product, req.body);
+    if (resValidation.errors) return res.status(400).json(resValidation);
+
     const productUpdated = await ProductRepositories.updateProduct(
       product,
-      req.body
+      resValidation
     );
 
-    return res.json(productUpdated);
+    return res.status(productUpdated.errors ? 400 : 200).json(productUpdated);
   }
   async delete(req, res) {
     if (!(await checkResponsabilityUserToken(req.userId))) {
@@ -59,24 +50,18 @@ class ProductController {
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
-    if (!product) {
-      return res.json({ errors: 'Product not found' });
+    console.log(product);
+    if (product.errors) {
+      return res.status(404).json({ errors: 'Product not found' });
     }
-    try {
-      await ProductRepositories.deleteProduct(product);
-      return res.json({ message: 'Product was deleted' });
-    } catch (errors) {
-      return res.json({ errors });
-    }
+    const response = await ProductRepositories.deleteProduct(product);
+    return res.status(response.errors ? 400 : 200).json(response);
   }
   async show(req, res) {
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
-    if (!product) {
-      return res.json({ errors: 'Product not found' });
-    }
-    return res.json(product);
+    return res.status(product.errors ? 404 : 200).json(product);
   }
 }
 

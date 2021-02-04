@@ -15,7 +15,6 @@ class CategoryRepositories {
       return { errors: 'Error while create category' };
     }
   }
-
   static async findCategoryById(id) {
     try {
       const category = await Category.findByPk(id);

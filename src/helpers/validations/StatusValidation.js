@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { consoleError } from '../errors/errors';
 
 class StatusValidation {
   static async store(data) {
@@ -11,6 +12,7 @@ class StatusValidation {
       const response = await schema.validate({ ...data });
       return response;
     } catch (errors) {
+      consoleError('StatusValidation', 'store', errors);
       return { errors: errors.errors[0] };
     }
   }
@@ -26,6 +28,7 @@ class StatusValidation {
       });
       return response;
     } catch (errors) {
+      consoleError('StatusValidation', 'update', errors);
       return { errors: errors.errors[0] };
     }
   }
