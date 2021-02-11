@@ -8,7 +8,7 @@ const emailOptions = {
     const alreadyExists = await UserRepositories.findUserByEmail(email);
 
     if (alreadyExists.errors || alreadyExists) {
-      if (alreadyExists.errors && alreadyExists.errors === 'user not found') {
+      if (alreadyExists.errors && alreadyExists.errors === 'User not found') {
         return true;
       }
       return false; //retorna erro no yup

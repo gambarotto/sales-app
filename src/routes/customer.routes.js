@@ -6,6 +6,7 @@ import AddressController from '../app/controllers/AddressController';
 import SessionController from '../app/controllers/SessionController';
 import CustomerPhonesControllers from '../app/controllers/CustomerPhonesControllers';
 import DeliveryController from '../app/controllers/DeliveryController';
+import OrderController from '../app/controllers/OrderController';
 
 const routes = new Router();
 
@@ -28,6 +29,13 @@ routes.get('/adresses', AuthCustomer, AddressController.index);
 routes.put('/adresses/:addressId', AuthCustomer, AddressController.update);
 routes.get('/adresses/:addressId', AuthCustomer, AddressController.show);
 routes.delete('/adresses/:addressId', AuthCustomer, AddressController.delete);
+
+/** ORDERS ROUTES */
+routes.post('/orders', AuthCustomer, OrderController.store);
+routes.get('/orders', AuthUser, OrderController.index);
+routes.put('/orders/:orderId', AuthCustomer, OrderController.update);
+routes.get('/orders/:orderId', AuthCustomer, OrderController.show);
+routes.delete('/orders/:orderId', AuthCustomer, OrderController.delete);
 
 /** DELIVERIES ROUTES */
 routes.post('/deliveries', AuthCustomer, DeliveryController.store);

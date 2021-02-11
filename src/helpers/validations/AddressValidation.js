@@ -19,7 +19,7 @@ const idOptions = {
 class AddressValidation {
   static async checkIfIsTheSameCustomer(idAddress, idToken) {
     try {
-      const address = await AddressRepositories.findAddressById(idAddress);
+      const address = await AddressRepositories.findByPk(idAddress);
       if (!address) {
         return { errors: 'Validation: Address not found' };
       }

@@ -47,7 +47,7 @@ class AddressController {
     return res.status(response.errors ? 404 : 200).json(response);
   }
   async show(req, res) {
-    const address = await AddressRepositories.findAddressById(
+    const address = await AddressRepositories.findByPk(
       req.params.addressId
     );
     return res.status(address.errors ? 404 : 200).json(address);

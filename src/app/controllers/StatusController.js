@@ -27,7 +27,7 @@ class StatusController {
     if (!(await checkResponsabilityUserToken(req.userId))) {
       return res.json({ errors: 'You do not have privileges for do this' });
     }
-    const status = await StatusRepositories.findStatusById(req.params.statusId);
+    const status = await StatusRepositories.findByPk(req.params.statusId);
     if (status.errors) {
       return res.status(404).json(status);
     }
@@ -42,7 +42,7 @@ class StatusController {
     return res.status(response.errors ? 400 : 200).json(response);
   }
   async delete(req, res) {
-    const status = await StatusRepositories.findStatusById(req.params.statusId);
+    const status = await StatusRepositories.findByPk(req.params.statusId);
     if (status.errors) {
       return res.status(404).json(status);
     }
@@ -50,7 +50,7 @@ class StatusController {
     return res.status(response.errors ? 400 : 200).json(response);
   }
   async show(req, res) {
-    const status = await StatusRepositories.findStatusById(req.params.statusId);
+    const status = await StatusRepositories.findByPk(req.params.statusId);
     return res.status(status.errors ? 400 : 200).json(
       status.errors
         ? status

@@ -11,7 +11,6 @@ import TypePaymentController from '../app/controllers/TypePaymentController';
 const routes = new Router();
 
 routes.post('/sessions/users', SessionController.adminStore);
-
 /** USERS ROUTES */
 routes.post('/users', UserController.store);
 routes.get('/users', AuthUser, UserController.index);

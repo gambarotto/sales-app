@@ -37,7 +37,7 @@ class AddressRepositories {
       return { errors: 'Error while create address' };
     }
   }
-  static async findAddressById(id) {
+  static async findByPk(id) {
     try {
       const address = await Address.findByPk(id);
       if (!address) {
@@ -45,7 +45,7 @@ class AddressRepositories {
       }
       return address;
     } catch (errors) {
-      consoleError('AddressRepositories', 'findAddressById', errors);
+      consoleError('AddressRepositories', 'findByPk', errors);
       return { errors: 'Error while fetching address' };
     }
   }
@@ -73,12 +73,12 @@ class AddressRepositories {
       return { errors: 'Error while fetching all address' };
     }
   }
-  static async findAddressByIdCustomer(idCustomer) {
+  static async findByPkCustomer(idCustomer) {
     try {
       const address = Address.findOne({ where: { id_customer: idCustomer } });
       return address;
     } catch (errors) {
-      consoleError('AddressRepositories', 'findAddressByIdCustomer', errors);
+      consoleError('AddressRepositories', 'findByPkCustomer', errors);
       return { errors: 'Error while fetching address by customer' };
     }
   }

@@ -17,7 +17,7 @@ module.exports = {
       },
       id_status: {
         type: Sequelize.STRING,
-        references: { model: 'status', key: 'id' },
+        references: { model: 'statuses', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,

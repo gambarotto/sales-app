@@ -44,15 +44,15 @@ class Database {
   async init() {
     this.connection = new Sequelize(databaseConfig);
     //Testa a conexão
-    try {
-      await this.connection.authenticate();
-      console.log(
-        '\x1b[33m%s\x1b[0m',
-        `=> 🚀 Connection with database has been established successfully`
-      );
-    } catch (errors) {
-      console.errors('Unable to connect to the database:', errors);
-    }
+    // try {
+    //   await this.connection.authenticate();
+    //   console.log(
+    //     '\x1b[33m%s\x1b[0m',
+    //     `=> 🚀 Connection with database has been established successfully`
+    //   );
+    // } catch (errors) {
+    //   console.errors('Unable to connect to the database:', errors);
+    // }
     //conecta os models ao db
     models
       .map((model) => model.init(this.connection))

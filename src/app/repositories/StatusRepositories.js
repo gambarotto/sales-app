@@ -15,7 +15,7 @@ class StatusRepositories {
       return { errors: 'error while create status' };
     }
   }
-  static async findStatusById(idReq) {
+  static async findByPk(idReq) {
     try {
       const status = await Status.findByPk(idReq);
       if (!status) return { errors: 'status not found' };

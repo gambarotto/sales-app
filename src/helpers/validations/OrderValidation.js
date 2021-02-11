@@ -1,8 +1,8 @@
 import * as yup from 'yup';
-import OrderRepositories from '../../app/repositories/OrderRepositories';
 import TypePaymentsRepositories from '../../app/repositories/TypePaymentsRepositories';
 import AddressRepositories from '../../app/repositories/AddressRepositories';
 import StatusRepositories from '../../app/repositories/StatusRepositories';
+import { consoleError } from '../errors/errors';
 
 const optionsDelivery = {
   name: 'delivery-address-exists',
@@ -10,7 +10,7 @@ const optionsDelivery = {
   test: async function (value) {
     try {
       const response = await AddressRepositories.findByPk(value);
-      if (!response) return false;
+      if (!response || response.errors) return false;
       return true;
     } catch (errors) {
       return false;
@@ -35,10 +35,11 @@ const optionsTypePayments = {
 const optionsAddress = {
   name: 'billing-address-exists',
   message: 'Billing Address not found',
+  //params: {path},
   test: async function (value) {
     try {
       const response = await AddressRepositories.findByPk(value);
-      if (!response) return false;
+      if (!response || response.errors) return false;
       return true;
     } catch (errors) {
       return false;
@@ -75,7 +76,42 @@ class OrderValidation {
       const response = await schema.validate(data);
       return response;
     } catch (errors) {
-      return { errors };
+      consoleError('OrderValidation', 'store', errors);
+      return { errors: errors.errors[0] };
+    }
+  }
+  static async update(order, data) {
+    const schema = yup.object().shape({
+      amount: yup.number().required(),
+      date_status: yup.date().required(),
+      id_customer: yup.string().required().default(order.id_customer),
+      id_type_payment: yup
+        .string()
+        .required()
+        .test(optionsTypePayments)
+        .default(order.id_type_payment),
+      id_billing_address: yup
+        .string()
+        .required()
+        .test(optionsAddress)
+        .default(order.id_billing_address),
+      id_delivery_address: yup
+        .string()
+        .required()
+        .test(optionsDelivery)
+        .default(order.id_delivery_address),
+      id_status: yup
+        .string()
+        .required()
+        .test(optionsStatus)
+        .default(order.id_status),
+    });
+    try {
+      const response = await schema.validate(data);
+      return response;
+    } catch (errors) {
+      consoleError('OrderValidation', 'update', errors);
+      return { errors: errors.errors[0] };
     }
   }
 }

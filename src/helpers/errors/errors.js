@@ -26,11 +26,14 @@ const nodeTips = {
   BGwhite: '\x1b[47m',
 };
 export function consoleError(nameFile = '', nameFunction = 'e', errors) {
-  return console.error(
-    nodeTips.red,
-    nodeTips.bright,
-    `${nameFile} :: ${nodeTips.yellow}${nameFunction} => ${nodeTips.green}`,
-    errors,
-    nodeTips.reset
+  return (
+    process.env.NODE_ENV !== 'test' &&
+    console.error(
+      nodeTips.red,
+      nodeTips.bright,
+      `${nameFile} :: ${nodeTips.yellow}${nameFunction} => ${nodeTips.green}`,
+      errors,
+      nodeTips.reset
+    )
   );
 }
