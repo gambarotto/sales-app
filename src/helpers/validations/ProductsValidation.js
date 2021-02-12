@@ -12,7 +12,7 @@ const optionsBrand = {
     }
     return true;
   },
-  message: 'Brand not found ',
+  message: 'Brand not found',
   exclusive: true,
 };
 const optionsCategory = {
@@ -24,7 +24,7 @@ const optionsCategory = {
     }
     return true;
   },
-  message: 'Category not found ',
+  message: 'Category not found',
   exclusive: true,
 };
 
@@ -99,7 +99,7 @@ class ProductsValidation {
         return { errors: errors.errors[0] };
       }
     }
-    if (data.id_category && data.id_category !== data.id_category) {
+    if (data.id_category && data.id_category !== product.id_category) {
       try {
         await categorySchema.validate(data.id_category);
       } catch (errors) {

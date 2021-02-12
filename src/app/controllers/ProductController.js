@@ -1,8 +1,6 @@
 import { checkResponsabilityUserToken } from '../middlewares/AuthUser';
 import ProductsValidation from '../../helpers/validations/ProductsValidation';
 import ProductRepositories from '../repositories/ProductRepositories';
-import BrandRepositories from '../repositories/BrandRepositories';
-import CategoryRepositories from '../repositories/CategoryRepositories';
 
 class ProductController {
   async store(req, res) {
@@ -31,7 +29,7 @@ class ProductController {
       req.params.productId
     );
     if (product.errors) {
-      return res.status(400).json({ product });
+      return res.status(400).json(product);
     }
     const resValidation = await ProductsValidation.update(product, req.body);
     if (resValidation.errors) return res.status(400).json(resValidation);
@@ -40,7 +38,6 @@ class ProductController {
       product,
       resValidation
     );
-
     return res.status(productUpdated.errors ? 400 : 200).json(productUpdated);
   }
   async delete(req, res) {
@@ -50,7 +47,6 @@ class ProductController {
     const product = await ProductRepositories.findProductById(
       req.params.productId
     );
-    console.log(product);
     if (product.errors) {
       return res.status(404).json({ errors: 'Product not found' });
     }

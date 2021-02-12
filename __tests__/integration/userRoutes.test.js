@@ -82,7 +82,6 @@ describe('User Routes', () => {
         expect(response.body.errors).toBe('name is a required field');
       });
       it('Should test email field, with email empty, must be return:: email is a required field ', async () => {
-        const email = 'joao@joao.com';
         const password = '123456';
         let response = await request(app).post('/users').send({
           id: uuidv4(),

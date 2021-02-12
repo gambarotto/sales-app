@@ -19,6 +19,7 @@ class CategoryRepositories {
     try {
       const category = await Category.findByPk(id);
       if (!category) return { errors: 'Category not found' };
+
       return category;
     } catch (errors) {
       consoleError('CategoryRepositories', 'findCategoryById', errors);
